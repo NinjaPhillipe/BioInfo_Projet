@@ -194,15 +194,17 @@ public class MainBioInfo
 
     public static void main(String[] args)
     {
-        String str1 = "CAGCACTTGGATTCTCGG";
-        String str2 = "CAGCGTGG";
+        // String str1 = "CAGCACTTGGATTCTCGG";
+        // String str2 = "CAGCGTGG";
 
-        int[][] a = loadSimiGLo(str1,str2);
-        reconstructionChaine(a,str1,str2);
+        // int[][] a = loadSimiGLo(str1,str2);
+        // reconstructionChaine(a,str1,str2);
 
-        Graph graph = new Graph();
-        int i = graph.addNode();
-        i = graph.addNode();
-        System.out.println("ok "+i);
+        // Graph graph = new Graph();
+        // int i = graph.addNode();
+        // i = graph.addNode();
+        // System.out.println("ok "+i);
+
+        System.out.println(Graph.prefix_suffixe("TCA","TATATCA"));
     }
 }

@@ -1,11 +1,12 @@
 package root;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Graph 
 {
 
-    private class Arc //implements Comparable<Arc>
+    private class Arc implements Comparable<Arc>
     {
         public int src,dest,weight;
         public Arc(int src,int dest,int weight)
@@ -15,18 +16,11 @@ public class Graph
             this.weight = weight;
         }
 
-        // @Override
-        // public boolean equals(Object arc)
-        // {
-            
-        //     return this.weight == arc.weight;
-        // }
-
-        // @Override 
-        // public int compareTo(Arc arc)
-        // {
-            
-        // }
+        @Override 
+        public int compareTo(Arc arc)
+        {
+            return this.weight - arc.weight;
+        }
     }
 
     private int n_node;
@@ -72,6 +66,14 @@ public class Graph
         return null;
     } 
 
+    public static int min( int a,int b)
+    {
+        if (a >b )
+        {
+            return b;
+        }
+        return a;
+    }
     public ArrayList<Arc> travel_graph()
     {
         int in[]  = new int[n_node];
@@ -90,17 +92,17 @@ public class Graph
 
         // tri arc
         // a opti 
-        ArrayList<Arc> sortedArc = new ArrayList<>(n_node);
+        Collections.sort(this.arcs);
         // pour chaque noeud dans la liste d arcs
-        for(Arc arc : arcs)
-        {
-            sortedArc.add(arc);
-        }
+        // for(Arc arc : arcs)
+        // {
+        //     sortedArc.add(arc);
+        // }
 
 
         ArrayList<Arc> res = new ArrayList<>();
         // 
-        for(Arc arc: sortedArc)
+        for(Arc arc: this.arcs)
         {
             /* && FINDSET(f)!=FINDSET(g) */
             if(in[arc.dest]==0 && out[arc.src]==0 && !findSet(make_set, arc.src).equals(findSet(make_set, arc.dest)) )
@@ -124,43 +126,26 @@ public class Graph
                 break;
             }
         }
-
         return res;
     }
 
 
     public static int prefix_suffixe(String prefix, String suffix)
-    {   int longueur = suffix.length();
-        int max_curr = 0;
-        int match_curr = 0;
-        while (longueur > 0)
+    {   
+        int tmp_match=0;
+        int max_match=0;
+        for (int i = 0; i < min(prefix.length(), suffix.length()); i++)
         {
-            for (int i = 0 ; i<= suffix.length() - longueur; i++)
-            {   
-                System.out.println(longueur);
-                System.out.println(prefix.charAt(i));
-                System.out.println(suffix.charAt(suffix.length() -i -1));
-                if (prefix.charAt(i)==suffix.charAt(suffix.length() -i -1))
-                {
-
-                    match_curr++;
-                    if (match_curr > max_curr)
-                    {
-                        max_curr = match_curr;
-                    }
-                }
-                else
-                {
-                    if (match_curr > max_curr)
-                    {
-                        max_curr = match_curr;
-                    }
-                    match_curr = 0;
-                }
-            }
-            longueur --;
+            for (int j = 0;j<= i //si j<i
+                &&  // and the characters at the calculated position are equals
+                (prefix.charAt(j) == suffix.charAt(suffix.length()-1-i+j )) ; j++)
+            {
+                tmp_match++;
+                if (i == j && tmp_match > max_match ) // if the prefix and suffix fully match
+                    max_match = tmp_match;
+            }   
+            tmp_match = 0;
         }
-        return max_curr;
+        return max_match;
     }
-
 }

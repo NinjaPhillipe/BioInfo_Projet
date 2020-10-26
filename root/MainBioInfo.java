@@ -1,5 +1,5 @@
 package root;
-
+import java. util. ArrayList;
 import java.io.File; 
 import java.io.FileNotFoundException;
 import java.util.Scanner; 
@@ -8,51 +8,43 @@ import root.Graph;
 
 public class MainBioInfo
 {
-    public static void readFile()
+    public static ArrayList<String> readFile()
     {
         try 
         {
-            File myObj = new File("test.txt");
+            File myObj = new File("../test.txt");
 
             Scanner myReader = new Scanner(myObj);
 
             String res = new String();
-
+            ArrayList<String> test = new ArrayList<>();
             while (myReader.hasNextLine()) 
             {
                 String data = myReader.nextLine();
-                
                 if(data.charAt(0) == '>')
                 {
-                    // System.out.println("\n\nFRAG ");
-                    // for(int i = 0 ; i < res.length() ; i++)
-                    // {
-                    //     System.out.println(""+res.charAt(i));
-                    // }
                     if(res.length() > 0)
                     {
-                        
-                    }
-                    else
-                    {
-
+                        test.add(res);
+                        res = "";
                     }
 
-                    res = new String();
                 }
                 else
                 {
                     res += data;
                 }
 
-                // System.out.println(data);
             }
             myReader.close();
+            return test;
+
         } catch (FileNotFoundException e) 
         {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
+        return null;
     }
 
     public static void printSimi(int[][] ok)
@@ -88,6 +80,33 @@ public class MainBioInfo
         //  1
 
         int [][] ok = new int[frag1.length()+1][frag2.length()+1];
+
+        ok[0][0] = 0;
+
+
+        ok[0][0] = 0;
+
+
+        ok[0][0] = 0;
+
+
+        ok[0][0] = 0;
+
+
+        ok[0][0] = 0;
+
+
+        ok[0][0] = 0;
+
+
+        ok[0][0] = 0;
+
+
+        ok[0][0] = 0;
+
+
+        ok[0][0] = 0;
+
 
         ok[0][0] = 0;
 
@@ -205,6 +224,9 @@ public class MainBioInfo
         // i = graph.addNode();
         // System.out.println("ok "+i);
 
-        System.out.println(Graph.prefix_suffixe("TCA","TATATCA"));
+
+        System.out.println(Graph.prefix_suffixe("TCACACA","TCAFTCA"));
+        Graph graph = new Graph();
+        System.out.println(readFile());
     }
 }

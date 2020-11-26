@@ -5,8 +5,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import root.Frag;
-
 public class Utils {
 
     public static ArrayList<String> readFile()
@@ -47,7 +45,7 @@ public class Utils {
     }
 
 
-    public static void do_all(ArrayList<String> frag_chars)
+    public static Frag[][] do_all_frag(ArrayList<String> frag_chars)
     {
        Frag[][] frags = new Frag[frag_chars.size()][2];
 
@@ -55,6 +53,7 @@ public class Utils {
        {
            frags[i] = Frag.init_f_and_fprime(frag_chars.get(i).toCharArray());
        }
+       return frags;
     }
 
 
@@ -65,31 +64,31 @@ public class Utils {
      */
     public static void compl_inverse(char[] chars)
     {
-        System.out.println(chars);
+        // System.out.println(chars);
 
         // compl
         for(int i = 0 ; i < chars.length;i++)
         {
             switch (chars[i]) 
             {
-                case 'A':
-                    chars[i] = 'T';
+                case 'a':
+                    chars[i] = 't';
                     break;
-                case 'T':
-                    chars[i] = 'A';
+                case 't':
+                    chars[i] = 'a';
                     break;
-                case 'G':
-                    chars[i] = 'C';
+                case 'g':
+                    chars[i] = 'c';
                     break;
-                case 'C':
-                    chars[i] = 'G';
+                case 'c':
+                    chars[i] = 'g';
                     break;
                 default:
                     System.out.println("UNKNOW ");
                     break;
             }
         }
-        System.out.println(chars);
+        // System.out.println(chars);
         
         //inverse
         for(int i = 0 ; i < chars.length/2 ; i++)
@@ -99,7 +98,7 @@ public class Utils {
             chars[chars.length-1-i] = tmp;
         }
 
-        System.out.println(chars);
+        // System.out.println(chars);
     }
 
     public static int[][] loadSimiGLo(Frag frag1, Frag frag2)
@@ -139,7 +138,7 @@ public class Utils {
             }
         }
 
-        printSimi(ok);
+        // printSimi(ok);
 
         return ok;
     }

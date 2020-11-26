@@ -1,7 +1,5 @@
 package root;
 
-import root.Utils;
-
 public class Frag 
 {
     private byte[] data;
@@ -32,16 +30,16 @@ public class Frag
         {
             switch (chars[i]) 
             {
-                case 'A':
+                case 'a':
                     set(i,0b00);
                     break;
-                case 'C':
+                case 'c':
                     set(i,0b01);
                     break;
-                case 'G':
+                case 'g':
                     set(i,0b10);
                     break;
-                case 'T':
+                case 't':
                     set(i,0b11);
                     break;
                 default:

@@ -8,7 +8,8 @@ public class Graph
     private class Arc implements Comparable<Arc>
     {
         public int src,dest,weight;
-        public Arc(int src,int dest,int weight)
+        boolean src_ci,dst_ci; // complementaire inverser
+        public Arc(int src,boolean src_ci,int dest,boolean dst_ci,int weight)
         {
             this.src = src;
             this.dest = dest;
@@ -24,52 +25,58 @@ public class Graph
     }
 
     private int n_node;
-    private ArrayList<String> node_data;
+    private Frag[][] node_data;
     // private ArrayList<ArrayList<Arc>> arcs;
     private ArrayList<Arc> arcs; 
 
-    public Graph()
+    public Graph(Frag[][] frags)
     {
-        n_node = 0;
+        this.node_data = frags;
+        n_node = frags.length;
         arcs = new ArrayList<>();
-        node_data = new ArrayList<>();
+
+        // calcul tout les arcs
+        computeArc();
     }
 
     /**
-    /* return id of node
-    /*
-    **/
-    public int addNode(String data)
-    {
-        n_node++;
-        node_data.add(data);
-        // arcs.add(new ArrayList<>());
-        return n_node;
-    }
-
-    public int add_arc(int i, int j,int weight)
-    {
-        if( i < n_node && j < n_node)
-        {
-            arcs.add(new Arc(i,j,weight));
-        }
-        return 0;
-    }
-
-    public void computeArc()
+     * Calcul tout les arcs en faisant attention de ne pas mettre
+     * d'arc de f vers fprime et inversement
+     */
+    private void computeArc()
     {
         // pour chaque noeud 
-        for(int pref = 0; pref < node_data.size() ; pref++ )
+        for(int f = 0; f < node_data.length ; f++ )
         {
             // pour chaque autre noeud
-            for(int suff = 0; suff < node_data.size() ; suff++ )
+            for(int g = 0; g < node_data.length ; g++ )
             {
-                if( pref!= suff)
+                if(f != g)
                 {
-                    // System.out.println(node_data.get(i)+"\n"+node_data.get(j)+"\n\n");
-                    // int weight = prefix_suffixe(node_data.get(pref), node_data.get(suff));
-                    int weight = 0; // DEBUG
-                    this.add_arc(suff, pref, weight);
+                    //generer les 4 matrices 
+                    { // genere le cas f g 
+                        int[][] f_g = Utils.loadSimiGLo(node_data[f][0], node_data[g][0]);
+                        arcs.add(new Arc(f,false,g,false,Utils.get_normal(f_g)) );
+                        arcs.add(new Arc(f,false,g,false,Utils.get_invert(f_g)) );
+                    }
+
+                    { // genere le cas fp g 
+                        int[][] fp_g = Utils.loadSimiGLo(node_data[f][1], node_data[g][0]);
+                        arcs.add(new Arc(f,true,g,false,Utils.get_normal(fp_g)) );
+                        arcs.add(new Arc(f,true,g,false,Utils.get_invert(fp_g)) );
+                    }
+
+                    { // genere le cas f gp 
+                        int[][] f_gp = Utils.loadSimiGLo(node_data[f][0], node_data[g][1]);
+                        arcs.add(new Arc(f,false,g,true,Utils.get_normal(f_gp)));
+                        arcs.add(new Arc(f,false,g,true,Utils.get_invert(f_gp)));
+                    }
+
+                    { // genere le cas fp gp 
+                        int[][] fp_gp = Utils.loadSimiGLo(node_data[f][1], node_data[g][1]);
+                        arcs.add(new Arc(f,true,g,true,Utils.get_normal(fp_gp)));
+                        arcs.add(new Arc(f,true,g,true,Utils.get_invert(fp_gp)));
+                    }
                 }
             }
         }
@@ -128,7 +135,7 @@ public class Graph
         // premier noeud passe entree interdite car sinon cycle
         in[this.arcs.get(0).src] = 1;
 
-        System.out.println("nbr arc "+ arcs.size());
+        // System.out.println("nbr arc "+ arcs.size());
         for(Arc arc: this.arcs)
         {
             /* && FINDSET(f)!=FINDSET(g) */
@@ -192,7 +199,7 @@ public class Graph
 
 
         ArrayList<Arc> chemin =  this.get_hamiltonian();
-        System.out.println("arc in chemin "+chemin.size()); // nbr noeud-1
+        // System.out.println("arc in chemin "+chemin.size()); // nbr noeud-1
 
         //  // print arc 
         // for (Arc arc : chemin )
@@ -213,21 +220,24 @@ public class Graph
         // System.out.println(res);
 
 
-        LListCons consensus = new LListCons(node_data.get(res.get(0).src));
-        // System.out.println("first  : "+node_data.get(res.get(0).src));
-        // System.out.println("second : "+node_data.get(res.get(0).dest));
-        System.out.println("con s "+consensus.getSize());
 
-        String chaine = "";
+        ////// NEED REWORK
 
-        for (Arc arc : res )
-        {
-            // System.out.println("\nSRC: "+arc.src+"  W: "+arc.weight+"  DST: "+arc.dest);
-            System.out.println("\nSRC: "+node_data.get(arc.src).length()+"  W: "+arc.weight+"  DST: "+node_data.get(arc.dest).length());
-            chaine+=consensus.add(node_data.get(arc.dest),arc.weight);
-        }
+        // LListCons consensus = new LListCons(node_data.get(res.get(0).src));
+        // // System.out.println("first  : "+node_data.get(res.get(0).src));
+        // // System.out.println("second : "+node_data.get(res.get(0).dest));
+        // System.out.println("con s "+consensus.getSize());
 
-        System.out.println("\n"+chaine.length());
+        // String chaine = "";
+
+        // for (Arc arc : res )
+        // {
+        //     // System.out.println("\nSRC: "+arc.src+"  W: "+arc.weight+"  DST: "+arc.dest);
+        //     System.out.println("\nSRC: "+node_data.get(arc.src).length()+"  W: "+arc.weight+"  DST: "+node_data.get(arc.dest).length());
+        //     chaine+=consensus.add(node_data.get(arc.dest),arc.weight);
+        // }
+
+        // System.out.println("\n"+chaine.length());
 
 
         return null;

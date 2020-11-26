@@ -1,8 +1,5 @@
 package root;
 import java. util. ArrayList;
-import java.io.File; 
-import java.io.FileNotFoundException;
-import java.util.Scanner;
 
 public class MainBioInfo
 {
@@ -128,23 +125,28 @@ public class MainBioInfo
         // System.out.println(Graph.prefix_suffixe(t1,t2)); 
 
 
-        // TEST FRAG 
-        Frag frag = new Frag("ACGTAGGT".toCharArray());
-        System.out.println(frag);
+        // // TEST FRAG 
+        // Frag frag = new Frag("ACGTAGGT".toCharArray());
+        // System.out.println(frag);
 
 
-        // TEST 
-        Frag frag1 = new Frag("CAGCACTTGGATTCTCGG".toCharArray());
-        Frag frag2 = new Frag("CAGCGTGG".toCharArray());
+        // // TEST 
+        // Frag frag1 = new Frag("CAGCACTTGGATTCTCGG".toCharArray());
+        // Frag frag2 = new Frag("CAGCGTGG".toCharArray());
 
-        int[][] simi = Utils.loadSimiGLo(frag1,frag2);
+        // int[][] simi = Utils.loadSimiGLo(frag1,frag2);
 
-        int a = Utils.get_normal(simi);
-        int b = Utils.get_invert(simi);
+        // int a = Utils.get_normal(simi);
+        // int b = Utils.get_invert(simi);
 
-        System.out.println("fdff "+a+" "+b);
+        // System.out.println("fdff "+a+" "+b);
 
 
 
+        // TEST ALL
+        ArrayList<String> frags_str = Utils.readFile();
+
+        Frag[][] frags = Utils.do_all_frag(frags_str);
+        Graph g = new Graph(frags);
     }
 }

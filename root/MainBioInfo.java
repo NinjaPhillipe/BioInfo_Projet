@@ -267,27 +267,32 @@ public class MainBioInfo
         // String[] align =reconstructionChaine(a,str1,str2);
         // System.out.println(align[0]+"\n"+align[1]);
 
-        // TEST 4
-        ArrayList<String> frags = readFile();
+        // // TEST 4
+        // ArrayList<String> frags = readFile();
 
-        ArrayList<String> align = doAllSimi(frags);
-        System.out.println(align.size());
-
-
-        Graph graph = new Graph();
-        for(String st : align)
-        {
-            graph.addNode(st);
-        } 
+        // ArrayList<String> align = doAllSimi(frags);
+        // System.out.println(align.size());
 
 
-        graph.computeArc();
+        // Graph graph = new Graph();
+        // for(String st : align)
+        // {
+        //     graph.addNode(st);
+        // } 
 
-        graph.hamiltonian(); 
+
+        // graph.computeArc();
+
+        // graph.hamiltonian(); 
 
         // TEST 5
         // String t1 = "AA_TCGT" ;
         // String t2 = "AAATCGT" ;    
         // System.out.println(Graph.prefix_suffixe(t1,t2)); 
+
+
+        // TEST FRAG 
+        Frag frag = new Frag("ACGTAGGT".toCharArray());
+        System.out.println(frag);
     }
 }

@@ -3,8 +3,6 @@ package root;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import root.LListCons;
-
 public class Graph 
 {
     private class Arc implements Comparable<Arc>
@@ -69,7 +67,8 @@ public class Graph
                 if( pref!= suff)
                 {
                     // System.out.println(node_data.get(i)+"\n"+node_data.get(j)+"\n\n");
-                    int weight = prefix_suffixe(node_data.get(pref), node_data.get(suff));
+                    // int weight = prefix_suffixe(node_data.get(pref), node_data.get(suff));
+                    int weight = 0; // DEBUG
                     this.add_arc(suff, pref, weight);
                 }
             }
@@ -235,25 +234,25 @@ public class Graph
     }
 
 
-    public static int prefix_suffixe(String prefix, String suffix)
-    {   
-        int tmp_match=0;
-        int max_match=0;
-        for (int i = 0; i < min(prefix.length(), suffix.length()); i++)
-        {
-            for (int j = 0;j<= i //si j<i
-                &&  // and the characters at the calculated position are equals
-                (prefix.charAt(j) == suffix.charAt(suffix.length()-1-i+j ) 
-                || prefix.charAt(j) == '_' || suffix.charAt(suffix.length()-1-i+j) == '_'
-                ) 
-                ; j++) 
-            {
-                tmp_match++;
-                if (i == j && tmp_match > max_match ) // if the prefix and suffix fully match
-                    max_match = tmp_match;
-            }   
-            tmp_match = 0;
-        }
-        return max_match;
-    }
+    // public static int prefix_suffixe(String prefix, String suffix)
+    // {   
+    //     int tmp_match=0;
+    //     int max_match=0;
+    //     for (int i = 0; i < min(prefix.length(), suffix.length()); i++)
+    //     {
+    //         for (int j = 0;j<= i //si j<i
+    //             &&  // and the characters at the calculated position are equals
+    //             (prefix.charAt(j) == suffix.charAt(suffix.length()-1-i+j ) 
+    //             || prefix.charAt(j) == '_' || suffix.charAt(suffix.length()-1-i+j) == '_'
+    //             ) 
+    //             ; j++) 
+    //         {
+    //             tmp_match++;
+    //             if (i == j && tmp_match > max_match ) // if the prefix and suffix fully match
+    //                 max_match = tmp_match;
+    //         }   
+    //         tmp_match = 0;
+    //     }
+    //     return max_match;
+    // }
 }

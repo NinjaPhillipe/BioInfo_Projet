@@ -1,19 +1,32 @@
 package root;
 
+import root.Utils;
+
 public class Frag 
 {
     private byte[] data;
     private int size;
+    private static int idCount = 0;
+    private int id = 0;
 
     // size of field in bits 
     private static final int bitsL = 2;
     // number of slot in one byte
     private static final int nslot = 8/bitsL;
-    public Frag(char[] chars)
-    {    
-        
+
+    private Frag(char[] chars,int id)
+    {
         this.size = chars.length;
-        this.data = new byte[this.size*bitsL/8];
+
+        if(this.size*bitsL%8 > 0 )
+        {
+            this.data = new byte[this.size*bitsL/8 +1];
+        }
+        else
+        {
+            this.data = new byte[this.size*bitsL/8];
+        }
+        
 
         for (int i = 0 ; i < this.size ;i++)
         {
@@ -37,7 +50,20 @@ public class Frag
             }
         }
     }
+    public Frag(char[] chars)
+    {   
+        this(chars,idCount);
+        idCount++;
+    }
 
+    public static Frag[] init_f_and_fprime(char[] chars)
+    {
+        Frag[] res = new Frag[2];
+        res[0] = new Frag(chars);
+        Utils.compl_inverse(chars);
+        res[1] = new Frag(chars,idCount);
+        return res;
+    }
 
     // GET / SET
     /*
@@ -55,9 +81,23 @@ public class Frag
         this.data[i/nslot] |= data << (i%nslot)*bitsL;
     }
 
-    private int get(int i)
+    public byte get(int i)
     {
-        return (this.data[i/nslot] >> (i%nslot)*bitsL ) & 0b11;
+        return (byte) ( (this.data[i/nslot] >> (i%nslot)*bitsL ) & 0b11 );
+    }
+
+
+    public int size()
+    {
+        return this.size;
+    }
+    public int get_id()
+    {
+        return this.id;
+    }
+    public static int get_idCount()
+    {
+        return idCount;
     }
 
     public String toString()

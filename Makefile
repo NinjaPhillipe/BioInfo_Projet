@@ -1,4 +1,4 @@
-FILE = root/MainBioInfo.java root/Graph.java root/test/TestAll.java
+FILE = root/MainBioInfo.java  root/test/TestAll.java
 
 build:
 	javac $(FILE) -d ./build/

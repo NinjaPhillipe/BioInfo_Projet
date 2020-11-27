@@ -1,30 +1,17 @@
-package root;
+package root.dataStuct;
 
-public class Frag 
+import root.Utils;
+
+public class Frag extends BitsData
 {
-    private byte[] data;
-    private int size;
     private static int idCount = 0;
     private int id = 0;
-
-    // size of field in bits 
-    private static final int bitsL = 2;
-    // number of slot in one byte
-    private static final int nslot = 8/bitsL;
 
     private Frag(char[] chars,int id)
     {
         this.size = chars.length;
 
-        if(this.size*bitsL%8 > 0 )
-        {
-            this.data = new byte[this.size*bitsL/8 +1];
-        }
-        else
-        {
-            this.data = new byte[this.size*bitsL/8];
-        }
-        
+        alloc_data();
 
         for (int i = 0 ; i < this.size ;i++)
         {
@@ -69,26 +56,6 @@ public class Frag
         (i%nslot)*bitsL : le nombre de bits dont ont doit decaler pour trouver le champ
     */
 
-    /**
-     * Mets le champ a la valeur donnee
-     * @param i     le champ 
-     * @param data  la valeur
-     */
-    private void set(int i,int data)
-    {
-        this.data[i/nslot] |= data << (i%nslot)*bitsL;
-    }
-
-    public byte get(int i)
-    {
-        return (byte) ( (this.data[i/nslot] >> (i%nslot)*bitsL ) & 0b11 );
-    }
-
-
-    public int size()
-    {
-        return this.size;
-    }
     public int get_id()
     {
         return this.id;

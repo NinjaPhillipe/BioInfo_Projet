@@ -1,14 +1,10 @@
-package root;
+package root.dataStuct;
 
-public class Overlap 
+public class Overlap extends BitsData
 {
-    private byte[] data;
-    private int size;
 
-    // size of field in bits 
-    private static final int bitsL = 2;
-    // number of slot in one byte
-    private static final int nslot = 8/bitsL;
+
+   
 
     public Overlap(int[][] simi,boolean invert)
     {
@@ -46,17 +42,9 @@ public class Overlap
         afin d eviter de devoir allouer plusieur fois la memoire
         */
         set_size_needed(simi,y_cur,x_cur);
-        System.out.println("size "+size);
        
         // alloue la memoire dont ont a besoin
-        if(this.size*bitsL%8 > 0 )
-        {
-            this.data = new byte[this.size*bitsL/8 +1];
-        }
-        else
-        {
-            this.data = new byte[this.size*bitsL/8];
-        }
+       alloc_data();
 
         // car on part de la fin
         int i = this.size-1; 
@@ -117,33 +105,6 @@ public class Overlap
                 this.size++;
             }
         }
-    }
-
-    // GET / SET
-    /*
-        i/nslot : l'octet dans lequel se trouve le champ
-        (i%nslot)*bitsL : le nombre de bits dont ont doit decaler pour trouver le champ
-    */
-
-    /**
-     * Mets le champ a la valeur donnee
-     * @param i     le champ 
-     * @param data  la valeur
-     */
-    private void set(int i,int data)
-    {
-        this.data[i/nslot] |= data << (i%nslot)*bitsL;
-    }
-
-    public byte get(int i)
-    {
-        return (byte) ( (this.data[i/nslot] >> (i%nslot)*bitsL ) & 0b11 );
-    }
-
-
-    public int size()
-    {
-        return this.size;
     }
 
     public String toString()

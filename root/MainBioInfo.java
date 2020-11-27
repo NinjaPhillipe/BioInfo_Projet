@@ -1,6 +1,9 @@
 package root;
 import java. util. ArrayList;
 
+import root.dataStuct.Frag;
+import root.dataStuct.Graph;
+
 public class MainBioInfo
 {
     public static void main(String[] args)

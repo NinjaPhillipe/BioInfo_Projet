@@ -1,7 +1,11 @@
-package root;
+package root.dataStuct;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
+import root.Utils;
+import root.dataStuct.Frag;
+import root.dataStuct.Overlap;
 
 public class Graph 
 {
@@ -9,11 +13,13 @@ public class Graph
     {
         public int src,dest,weight;
         public boolean src_ci,dst_ci; // complementaire inverser
-        public Arc(int src,boolean src_ci,int dest,boolean dst_ci,int weight)
+        public Overlap overlap;
+        public Arc(int src,boolean src_ci,int dest,boolean dst_ci,int weight,Overlap overlap)
         {
             this.src = src;
             this.dest = dest;
             this.weight = weight;
+            this.overlap = overlap;
         }
 
         @Override 
@@ -53,6 +59,7 @@ public class Graph
         // pour chaque noeud 
         for(int f = 0; f < node_data.length ; f++ )
         {
+            System.out.println(f+"/"+node_data.length);
             // pour chaque autre noeud
             for(int g = 0; g < node_data.length ; g++ )
             {
@@ -61,26 +68,26 @@ public class Graph
                     //generer les 4 matrices 
                     { // genere le cas f g 
                         int[][] f_g = Utils.loadSimiGLo(node_data[f][0], node_data[g][0]);
-                        arcs.add(new Arc(f,false,g,false,Utils.get_normal(f_g)) );
-                        arcs.add(new Arc(f,false,g,false,Utils.get_invert(f_g)) );
+                        arcs.add(new Arc(f,false,g,false,Utils.get_normal(f_g),new Overlap(f_g, false)) );
+                        arcs.add(new Arc(f,false,g,false,Utils.get_invert(f_g),new Overlap(f_g, true)) );
                     }
 
                     { // genere le cas fp g 
                         int[][] fp_g = Utils.loadSimiGLo(node_data[f][1], node_data[g][0]);
-                        arcs.add(new Arc(f,true,g,false,Utils.get_normal(fp_g)) );
-                        arcs.add(new Arc(f,true,g,false,Utils.get_invert(fp_g)) );
+                        arcs.add(new Arc(f,true,g,false,Utils.get_normal(fp_g),new Overlap(fp_g, false)) );
+                        arcs.add(new Arc(f,true,g,false,Utils.get_invert(fp_g),new Overlap(fp_g, true)) );
                     }
 
                     { // genere le cas f gp 
                         int[][] f_gp = Utils.loadSimiGLo(node_data[f][0], node_data[g][1]);
-                        arcs.add(new Arc(f,false,g,true,Utils.get_normal(f_gp)));
-                        arcs.add(new Arc(f,false,g,true,Utils.get_invert(f_gp)));
+                        arcs.add(new Arc(f,false,g,true,Utils.get_normal(f_gp),new Overlap(f_gp, false)));
+                        arcs.add(new Arc(f,false,g,true,Utils.get_invert(f_gp),new Overlap(f_gp, true)));
                     }
 
                     { // genere le cas fp gp 
                         int[][] fp_gp = Utils.loadSimiGLo(node_data[f][1], node_data[g][1]);
-                        arcs.add(new Arc(f,true,g,true,Utils.get_normal(fp_gp)));
-                        arcs.add(new Arc(f,true,g,true,Utils.get_invert(fp_gp)));
+                        arcs.add(new Arc(f,true,g,true,Utils.get_normal(fp_gp),new Overlap(fp_gp, false)));
+                        arcs.add(new Arc(f,true,g,true,Utils.get_invert(fp_gp),new Overlap(fp_gp, true)));
                     }
                 }
             }
@@ -216,6 +223,8 @@ public class Graph
 
         ////// NEED REWORK
 
+        // utiliser OVERLAP AFIN DE DETERMINER le vote de consensus
+
         // LListCons consensus = new LListCons(node_data.get(res.get(0).src));
         // // System.out.println("first  : "+node_data.get(res.get(0).src));
         // // System.out.println("second : "+node_data.get(res.get(0).dest));
@@ -235,27 +244,4 @@ public class Graph
 
         return null;
     }
-
-
-    // public static int prefix_suffixe(String prefix, String suffix)
-    // {   
-    //     int tmp_match=0;
-    //     int max_match=0;
-    //     for (int i = 0; i < min(prefix.length(), suffix.length()); i++)
-    //     {
-    //         for (int j = 0;j<= i //si j<i
-    //             &&  // and the characters at the calculated position are equals
-    //             (prefix.charAt(j) == suffix.charAt(suffix.length()-1-i+j ) 
-    //             || prefix.charAt(j) == '_' || suffix.charAt(suffix.length()-1-i+j) == '_'
-    //             ) 
-    //             ; j++) 
-    //         {
-    //             tmp_match++;
-    //             if (i == j && tmp_match > max_match ) // if the prefix and suffix fully match
-    //                 max_match = tmp_match;
-    //         }   
-    //         tmp_match = 0;
-    //     }
-    //     return max_match;
-    // }
 }

@@ -8,7 +8,7 @@ public class Graph
     private class Arc implements Comparable<Arc>
     {
         public int src,dest,weight;
-        boolean src_ci,dst_ci; // complementaire inverser
+        public boolean src_ci,dst_ci; // complementaire inverser
         public Arc(int src,boolean src_ci,int dest,boolean dst_ci,int weight)
         {
             this.src = src;
@@ -21,6 +21,11 @@ public class Graph
         {
             // reversed
             return arc.weight - this.weight;
+        }
+
+        public String toString()
+        {
+            return this.src+" -> "+this.dest+" inv("+this.src_ci+"|"+this.dst_ci+") weigth "+this.weight;
         }
     }
 
@@ -164,6 +169,7 @@ public class Graph
             }
         }
         // ERROR
+        System.out.println("Can't get hamiltonian path");
         return null;
     }
 
@@ -196,30 +202,17 @@ public class Graph
 
     public ArrayList<String> hamiltonian()
     {
-
+        System.out.println("Start Hamiltonian");
 
         ArrayList<Arc> chemin =  this.get_hamiltonian();
-        // System.out.println("arc in chemin "+chemin.size()); // nbr noeud-1
-
-        //  // print arc 
-        // for (Arc arc : chemin )
-        // {
-        //     System.out.println("SRC: "+arc.src+"  W: "+arc.weight+"  DST: "+arc.dest);
-        // }
 
         ArrayList<Arc> res = sortHamiltonian(chemin);
 
-        // print arc 
-        // for (Arc arc : res )
-        // {
-        //     System.out.println("SRC: "+arc.src+"  W: "+arc.weight+"  DST: "+arc.dest);
-        // }
-
-
-        // System.out.println("SIZE RES "+res.size());
-        // System.out.println(res);
-
-
+        //print arc 
+        for (Arc arc : res )
+        {
+            System.out.println(arc);
+        }
 
         ////// NEED REWORK
 

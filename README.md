@@ -16,3 +16,5 @@ ok      char trop grand
         8 arc
         propagation des gaps
         dotmatcher non des axes premieres ligne mais (peut etre inverse)
+
+        fragment inclu

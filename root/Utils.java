@@ -8,7 +8,6 @@ import java.util.Scanner;
 import root.dataStuct.Frag;
 
 public class Utils {
-
     public static ArrayList<String> readFile()
     {
         try 

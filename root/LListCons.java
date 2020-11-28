@@ -1,54 +1,20 @@
 package root;
 
+import java.util.ArrayList;
+
+import root.dataStuct.Frag;
+import root.dataStuct.Graph;
+import root.dataStuct.Overlap;
+
 public class LListCons
 {
     private Node head;
     private Node tail;
     private int size;
 
-    public LListCons(String str)
-    {
-        head = null;
-        size = 0;
+    public String resS = "";
 
-        // creer 
-        head  = new Node(str.charAt(0));
-        tail = head;
-        for (int i = 0 ; i < str.length();i++)
-        {
-            this.add(str.charAt(i));
-        }
-    }
-
-    public  Node getHead()
-    {
-        return this.head;
-    }
-
-    public Node getTail()
-    {
-        return this.tail;
-    }
-
-    public int getSize(){ return size; }
-
-    public void add(char data)
-    {
-        if (this.head == null)
-        {
-            this.head = new Node (data);
-            this.tail = head;
-            this.size++;
-        }
-        else
-        {
-            tail.next = new Node(data);
-            tail = tail.next;
-            this.size++;
-        }
-    }
-
-    public class Node 
+    private class Node 
     {
         // ON SUPPOSE QUE LE TABLEAU PREND SUIT LA FORME A C G T
         public int [] acgt= {0,0,0,0};
@@ -58,26 +24,26 @@ public class LListCons
         /**
          * Cree un noeud et le place la donnee dans un dictionnaire
          */
-        public Node (char data)
+        public Node (byte data)
         {
             add_data(data);
             this.next = null;
         }
 
-        public void add_data(char data)
+        public void add_data(byte data)
         {
             switch(data)
             {   
-                case 'a' :
+                case Frag.A :
                     acgt[0]++;
                     break;
-                case 'c':
+                case Frag.C:
                     acgt[1]++;
                     break;
-                case 'g':
+                case Frag.G:
                     acgt[2]++;
                     break;
-                case 't':
+                case Frag.T:
                     acgt[3]++;
                     break;
             }
@@ -93,6 +59,75 @@ public class LListCons
         }
     }
 
+    /**
+     * 
+     * @param frags 
+     * @param arcs chemin hamiltonian triee selon l'ordre des arcs
+     */
+    public LListCons(Frag[][] frags,ArrayList<Graph.Arc> arcs)
+    {
+        head = null;
+        size = 0;
+
+        // si inverser
+        Frag firstFrag = get_frag(frags, arcs.get(0));
+
+        // creer 
+        head  = new Node(firstFrag.get(0));
+        tail = head;
+        for (int i = 0 ; i < firstFrag.size() ; i++)
+        {
+            this.add_to_end(firstFrag.get(i));
+        }
+
+        for(Graph.Arc a : arcs)
+        {
+            this.add(get_frag(frags,a),a.overlap);
+        }
+    }
+
+    public Frag get_frag(Frag[][] frags,Graph.Arc arc) // DOIT PAS ETRE LA
+    {
+        return arc.src_ci ? frags[arc.src][1] : frags[arc.src][0];
+    }
+
+    public  Node getHead()
+    {
+        return this.head;
+    }
+
+    public Node getTail()
+    {
+        return this.tail;
+    }
+
+    public void removeHead()
+    {
+        head = head.next;
+        this.size --;
+    }
+
+    public int getSize(){ return size; }
+
+    /**
+     * Ajoute un noeud a la fin de la liste
+     * @param data 
+     */
+    public void add_to_end(byte data)
+    {
+        if (this.head == null)
+        {
+            this.head = new Node (data);
+            this.tail = head;
+            this.size++;
+        }
+        else
+        {
+            tail.next = new Node(data);
+            tail = tail.next;
+            this.size++;
+        }
+    }
 
     /**
      * Ajoute un mot a la comparaison
@@ -100,12 +135,10 @@ public class LListCons
      * @param weight    taille de prefix==suffix
      * @return  lettre traitee
      */
-    public String add(String str, int weight)
+    public void add(Frag frag, Overlap overlap)
     {
-
-        int pretrait = this.size-weight +1;  // fait comme un inge 
-        System.out.println("LLS "+this.getSize());
-        System.out.println("PRETRAIT SIZE "+pretrait);
+        // pretraite la partie des byte avant l'overlap
+        int pretrait = this.size - overlap.size() + 1;  
 
         if( pretrait < 0)
         {
@@ -113,23 +146,15 @@ public class LListCons
             System.exit(23);
         }
 
-        String res = "";
-
         // ABCCD
         //   CCDF
         //   +  
         while(pretrait > 0)
         {
-            // System.out.print("acgt: "+head.acgt[0]);
-            // System.out.print(head.acgt[1]);
-            // System.out.print(head.acgt[2]);
-            // System.out.print(head.acgt[3]+"\n");
-
-
-            // System.out.println(head);
-            // get dic  pretraitre 
+            // get Array pretraitre 
             int [] tmp_acgt = head.acgt;
             String acgt = "ACGT";
+
             int max = 0;
             int index = 0;
             for (int i = 0 ; i < tmp_acgt.length; i++)
@@ -140,27 +165,27 @@ public class LListCons
                     index = i;
                 }
             }
-            char added = acgt.charAt(index);
-            res = res + added;
-            head = head.next;
+
+            resS += acgt.charAt(index);
+
+            removeHead();
             pretrait--;
-            this.size --;
         }
-        // partie 
+        
         Node tmp = head;
-        for(int i = 0 ; i < str.length() ; i++)
-        {  
-            if(tmp != null) // ajoute a la liste
-            {
-                head.add_data(str.charAt(i));
-                tmp = tmp.next; // passe au noeud suivant
-            }
-            else 
-            {   // cree un nouveau noeud
-                this.add(str.charAt(i));
-                // comme dernier noeud tmp reste null
-            }
+
+        // partie overlap 
+        // marche pas besoin d ajouter un mecanisme de propagation des gap entre les paires de comparaison 
+        for(int i = 0 ; i < overlap.size() ; i++)
+        {
+            tmp.add_data(frag.get(i));
+            tmp = tmp.next;
         }
-        return res;
+
+        // partie de fin
+        for(int i = overlap.size() ; i < frag.size() ; i++)
+        {  
+            this.add_to_end(frag.get(i));
+        }
     }
 }

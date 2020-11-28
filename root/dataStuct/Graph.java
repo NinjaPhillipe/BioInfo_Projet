@@ -1,15 +1,16 @@
 package root.dataStuct;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import root.LListCons;
 import root.Utils;
-import root.dataStuct.Frag;
-import root.dataStuct.Overlap;
 
 public class Graph 
 {
-    private class Arc implements Comparable<Arc>
+    public class Arc implements Comparable<Arc>
     {
         public int src,dest,weight;
         public boolean src_ci,dst_ci; // complementaire inverser
@@ -182,9 +183,9 @@ public class Graph
 
     private ArrayList<Arc> sortHamiltonian(ArrayList<Arc> chemin)
     {
-        ArrayList<Arc> sorted = new ArrayList<>();
+        ArrayList<Arc> sorted = new ArrayList<>(chemin.size());
 
-        sorted.add(chemin.get(0));
+        sorted.add(chemin.get(0)); // PAS BON ON NE SAIT PAS SI LE PREMIER EST LE DEBUT DU CHEMIN HAMILTONIAN
         int current = chemin.remove(0).dest;
         while(!chemin.isEmpty())
         {
@@ -221,9 +222,25 @@ public class Graph
             System.out.println(arc);
         }
 
+        LListCons consensus = new LListCons(this.node_data, res);
+        System.out.println(consensus.resS);
+        System.out.println(consensus.resS.length());
+
+        try {
+            FileWriter myWriter = new FileWriter("filename.txt");
+            myWriter.write("> Groupe-JSP Collection 1 Longueur "+consensus.resS.length()+"\n");
+            myWriter.write(consensus.resS);
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
         ////// NEED REWORK
 
         // utiliser OVERLAP AFIN DE DETERMINER le vote de consensus
+
 
         // LListCons consensus = new LListCons(node_data.get(res.get(0).src));
         // // System.out.println("first  : "+node_data.get(res.get(0).src));

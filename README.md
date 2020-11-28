@@ -18,3 +18,13 @@ ok      char trop grand
         dotmatcher non des axes premieres ligne mais (peut etre inverse)
 
         fragment inclu
+
+
+Si un fragments est choisi verif que dans le chemin hamiltonian sont contraire ne soit pas utiliser afin de comparer
+dans l'arc suivant
+
+
+BUG : le chemin hamiltinian ne contient 29 des 30 fragments
+
+
+Ajouter complementaire d un chemin est aussi un bon chemin

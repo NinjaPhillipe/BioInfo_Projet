@@ -89,5 +89,6 @@ public class MainBioInfo
         Graph g = new Graph(frags);
 
         g.hamiltonian();
+
     }
 }

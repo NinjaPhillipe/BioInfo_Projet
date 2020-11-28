@@ -4,6 +4,11 @@ import root.Utils;
 
 public class Frag extends BitsData
 {
+    public static final byte A = (byte) 0b00;
+    public static final byte C = (byte) 0b01;
+    public static final byte G = (byte) 0b10;
+    public static final byte T = (byte) 0b11;
+
     private static int idCount = 0;
     private int id = 0;
 
@@ -18,16 +23,16 @@ public class Frag extends BitsData
             switch (chars[i]) 
             {
                 case 'a':
-                    set(i,0b00);
+                    set(i,A);
                     break;
                 case 'c':
-                    set(i,0b01);
+                    set(i,C);
                     break;
                 case 'g':
-                    set(i,0b10);
+                    set(i,G);
                     break;
                 case 't':
-                    set(i,0b11);
+                    set(i,T);
                     break;
                 default:
                     System.out.println("ERROR "+chars[i]+ " unknow");
@@ -72,16 +77,16 @@ public class Frag extends BitsData
         {
             switch (this.get(i)) 
             {
-                case 0b00:
+                case A:
                     res+= 'A';
                     break;
-                case 0b01:
+                case C:
                     res+= 'C';
                     break;
-                case 0b10:
+                case G:
                     res+= 'G';
                     break;
-                case 0b11:
+                case T:
                     res+= 'T';
                     break;
                 default:

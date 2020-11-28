@@ -2,10 +2,6 @@ package root.dataStuct;
 
 public class Overlap extends BitsData
 {
-
-
-   
-
     public Overlap(int[][] simi,boolean invert)
     {
         int max,y_cur,x_cur;
@@ -39,12 +35,12 @@ public class Overlap extends BitsData
         
         /* 
         Iteration afin de determiner la taille de structure de donnees 
-        afin d eviter de devoir allouer plusieur fois la memoire
+        afin d eviter de devoir allouer plusieurs fois la memoire
         */
         set_size_needed(simi,y_cur,x_cur);
        
         // alloue la memoire dont ont a besoin
-       alloc_data();
+        alloc_data();
 
         // car on part de la fin
         int i = this.size-1; 
@@ -59,19 +55,19 @@ public class Overlap extends BitsData
             { // diag
                 x_cur-=1;
                 y_cur-=1;
-                set(i, 0b00);
+                set(i,(byte) 0b00);
             }
             else if (haut > gauche)
             { // haut
                 y_cur-=1;
-                set(i, 0b01);
+                set(i,(byte) 0b01);
                 // on monte dans le tableau 
                 // gap en x
             }
             else 
             { // gauche
                 x_cur-=1;
-                set(i, 0b10);
+                set(i,(byte) 0b10);
                 // on va a gauche dans le tableau 
                 // gap en y
             }

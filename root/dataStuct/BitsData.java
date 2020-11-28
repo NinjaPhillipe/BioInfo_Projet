@@ -36,7 +36,7 @@ public class BitsData
      * @param i     le champ 
      * @param data  la valeur
      */
-    protected void set(int i,int data)
+    protected void set(int i,byte data)
     {
         this.data[i/nslot] |= data << (i%nslot)*bitsL;
     }

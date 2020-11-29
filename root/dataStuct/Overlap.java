@@ -2,6 +2,10 @@ package root.dataStuct;
 
 public class Overlap extends BitsData
 {
+    public static final byte B = (byte) 0b00;
+    public static final byte G1 = (byte) 0b01;
+    public static final byte G2 = (byte) 0b10;
+
     public Overlap(int[][] simi,boolean invert)
     {
         int max,y_cur,x_cur;
@@ -47,7 +51,7 @@ public class Overlap extends BitsData
         while (y_cur>0 && x_cur>0)
         {
             int haut = simi[y_cur-1][x_cur];
-            int gauche  = simi[y_cur][x_cur-1];
+            int gauche = simi[y_cur][x_cur-1];
             int diag =  simi[y_cur-1][x_cur-1];
             // int maxTmp = max(haut, max(gauche, diag));
             
@@ -55,19 +59,19 @@ public class Overlap extends BitsData
             { // diag
                 x_cur-=1;
                 y_cur-=1;
-                set(i,(byte) 0b00);
+                set(i,B);
             }
             else if (haut > gauche)
             { // haut
                 y_cur-=1;
-                set(i,(byte) 0b01);
+                set(i,G2);
                 // on monte dans le tableau 
                 // gap en x
             }
             else 
             { // gauche
                 x_cur-=1;
-                set(i,(byte) 0b10);
+                set(i,G1);
                 // on va a gauche dans le tableau 
                 // gap en y
             }
@@ -80,7 +84,7 @@ public class Overlap extends BitsData
         while (y_cur>0 && x_cur>0)
         {
             int haut = simi[y_cur-1][x_cur];
-            int gauche  = simi[y_cur][x_cur-1];
+            int gauche = simi[y_cur][x_cur-1];
             int diag =  simi[y_cur-1][x_cur-1];
             // int maxTmp = max(haut, max(gauche, diag));
             
@@ -111,13 +115,13 @@ public class Overlap extends BitsData
             System.out.println("i : "+i);
             switch (this.get(i)) 
             {
-                case 0b00:
+                case B:
                     res+= 'B';
                     break;
-                case 0b01:
+                case G1:
                     res+= '1';
                     break;
-                case 0b10:
+                case G2:
                     res+= '2';
                     break;
                 default:

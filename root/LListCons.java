@@ -66,29 +66,21 @@ public class LListCons
      */
     public LListCons(Frag[][] frags,ArrayList<Graph.Arc> arcs)
     {
-        head = null;
-        size = 0;
+        // prend le premier fragments inverser ou non
+        Frag firstFrag = arcs.get(0).src_ci ? frags[arcs.get(0).src][1] : frags[arcs.get(0).src][0];
 
-        // si inverser
-        Frag firstFrag = get_frag(frags, arcs.get(0));
-
-        // creer 
-        head  = new Node(firstFrag.get(0));
-        tail = head;
+        // ajoute le fragment a la liste chainnee
         for (int i = 0 ; i < firstFrag.size() ; i++)
-        {
             this.add_to_end(firstFrag.get(i));
-        }
 
+        // ajoute les autres fragments
         for(Graph.Arc a : arcs)
-        {
-            this.add(get_frag(frags,a),a.overlap);
-        }
+            this.add_frag(get_frag_dst(frags,a),a.overlap);
     }
 
-    public Frag get_frag(Frag[][] frags,Graph.Arc arc) // DOIT PAS ETRE LA
+    public Frag get_frag_dst(Frag[][] frags,Graph.Arc arc) // DOIT PAS ETRE LA
     {
-        return arc.src_ci ? frags[arc.src][1] : frags[arc.src][0];
+        return arc.src_ci ? frags[arc.dest][1] : frags[arc.dest][0];
     }
 
     public  Node getHead()
@@ -105,6 +97,28 @@ public class LListCons
     {
         head = head.next;
         this.size --;
+    }
+
+    public void insert(Node b,int i)
+    {
+        if(i==0)
+        {
+            b.next = head;
+            head = b;
+        }else
+        {
+            // non safe
+            Node tmp = head;
+            while(i > 1)
+            {
+                tmp = tmp.next;
+                i--;
+            }
+            Node next = tmp.next;
+            tmp.next = b;
+            b.next = next; 
+        }
+        this.size++;
     }
 
     public int getSize(){ return size; }
@@ -130,15 +144,15 @@ public class LListCons
     }
 
     /**
-     * Ajoute un mot a la comparaison
-     * @param str       mot a ajouter
-     * @param weight    taille de prefix==suffix
-     * @return  lettre traitee
+     * Ajoute un fragments dans la liste de consensus
+     * @param frag
+     * @param overlap
      */
-    public void add(Frag frag, Overlap overlap)
+    public void add_frag(Frag frag, Overlap overlap)
     {
-        // pretraite la partie des byte avant l'overlap
-        int pretrait = this.size - overlap.size() + 1;  
+        
+        // pretraite la partie des octets avant l'overlap
+        int pretrait = this.size - overlap.size();  
 
         if( pretrait < 0)
         {
@@ -172,14 +186,37 @@ public class LListCons
             pretrait--;
         }
         
-        Node tmp = head;
-
+       
+        System.out.println("add "+overlap.size()+ " "+size );
         // partie overlap 
         // marche pas besoin d ajouter un mecanisme de propagation des gap entre les paires de comparaison 
-        for(int i = 0 ; i < overlap.size() ; i++)
         {
-            tmp.add_data(frag.get(i));
-            tmp = tmp.next;
+            Node tmp = head;
+            for(int i = 0 ; i < overlap.size() ; i++)
+            {
+                // System.out.println(""+i);
+                switch (overlap.get(i))
+                {
+                    case Overlap.B:
+                        tmp.add_data(frag.get(i));
+                        tmp = tmp.next;  
+                        break;
+                    case Overlap.G1:
+                        //gap 
+                        insert(new Node(frag.get(i)), i);
+                        tmp = tmp.next.next;
+                        i++;
+                        break;
+                    case Overlap.G2:
+                        tmp = tmp.next;
+                        //data
+                        tmp.add_data(frag.get(i));
+                        tmp = tmp.next;
+                        i++; // car on passe deux case
+                        break;
+                }
+                  
+            }
         }
 
         // partie de fin

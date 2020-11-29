@@ -21,6 +21,8 @@ public class LListCons
         
         public Node next;
 
+        public boolean gap = false;
+
         /**
          * Cree un noeud et le place la donnee dans un dictionnaire
          */
@@ -195,27 +197,28 @@ public class LListCons
             for(int i = 0 ; i < overlap.size() ; i++)
             {
                 // System.out.println(""+i);
-                switch (overlap.get(i))
+                if(!tmp.gap) // SERT A RIEN POUR L INSTANT
                 {
-                    case Overlap.B:
-                        tmp.add_data(frag.get(i));
-                        tmp = tmp.next;  
-                        break;
-                    case Overlap.G1:
-                        //gap 
-                        insert(new Node(frag.get(i)), i);
-                        tmp = tmp.next.next;
-                        i++;
-                        break;
-                    case Overlap.G2:
-                        tmp = tmp.next;
-                        //data
-                        tmp.add_data(frag.get(i));
-                        tmp = tmp.next;
-                        i++; // car on passe deux case
-                        break;
+                    switch (overlap.get(i))
+                    {
+                        case Overlap.B:
+                            tmp.add_data(frag.get(i));
+                            break;
+                        case Overlap.G1: // gap dans le premier mot
+                            insert(new Node(frag.get(i)), i);
+                            tmp = tmp.next;
+                            tmp.gap = true;
+                            i++; // car on passe deux case lors d un gap
+                            break;
+                        case Overlap.G2: // gap dans le deuxieme mot
+                            tmp.gap = true;
+                            tmp = tmp.next;
+                            tmp.add_data(frag.get(i));
+                            i++; // car on passe deux case lors d un gap
+                            break;
+                    }
                 }
-                  
+                tmp = tmp.next;
             }
         }
 

@@ -83,7 +83,7 @@ public class MainBioInfo
 
 
         // TEST ALL
-        ArrayList<String> frags_str = Utils.readFile();
+        ArrayList<String> frags_str = Utils.readFile("../output/C2-Simp.FASTA");
 
         Frag[][] frags = Utils.do_all_frag(frags_str);
         Graph g = new Graph(frags);

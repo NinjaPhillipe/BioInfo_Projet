@@ -1,37 +1,39 @@
 package root.dataStuct;
 
+import root.Simi;
+
 public class Overlap extends BitsData
 {
     public static final byte B = (byte) 0b00;
     public static final byte G1 = (byte) 0b01;
     public static final byte G2 = (byte) 0b10;
 
-    public Overlap(int[][] simi,boolean invert)
+    public Overlap(Simi simi,boolean invert)
     {
         int max,y_cur,x_cur;
         if(invert)
         {
-            y_cur = simi.length-1;
-            max = simi[y_cur][0];
+            y_cur = simi.getEnd_i()-1;
+            max = simi.getData(y_cur,0);
             x_cur = 0;
-            for(int i = 1 ; i < simi[0].length ; i++ )
+            for(int i = 1 ; i < simi.getEnd_j() ; i++ )
             {
-                if (simi[y_cur][i] > max )
+                if (simi.getData(y_cur,i) > max )
                 {
-                    max = simi[y_cur][i];
+                    max = simi.getData(y_cur,i);
                     x_cur = i;
                 }
             }
         }else
         {
-            x_cur = simi[0].length-1;
-            max = simi[0][x_cur];
+            x_cur = simi.getEnd_j()-1;
+            max = simi.getData(0,x_cur);
             y_cur = 0;
-            for(int i = 1 ; i < simi.length ; i++ )
+            for(int i = 1 ; i < simi.getEnd_i() ; i++ )
             {
-                if (simi[i][x_cur] > max )
+                if (simi.getData(i,x_cur) > max )
                 {
-                    max = simi[i][x_cur];
+                    max = simi.getData(i,x_cur);
                     y_cur = i;
                 }
             }
@@ -50,9 +52,9 @@ public class Overlap extends BitsData
         int i = this.size-1; 
         while (y_cur>0 && x_cur>0)
         {
-            int haut = simi[y_cur-1][x_cur];
-            int gauche = simi[y_cur][x_cur-1];
-            int diag =  simi[y_cur-1][x_cur-1];
+            int haut = simi.getData(y_cur-1,x_cur);
+            int gauche = simi.getData(y_cur,x_cur-1);
+            int diag =  simi.getData(y_cur-1,x_cur-1);
             // int maxTmp = max(haut, max(gauche, diag));
             
             if (diag >= 0)
@@ -79,13 +81,13 @@ public class Overlap extends BitsData
         }
     }
 
-    private void set_size_needed(int[][] simi,int y_cur,int x_cur)
+    private void set_size_needed(Simi simi,int y_cur,int x_cur)
     {
         while (y_cur>0 && x_cur>0)
         {
-            int haut = simi[y_cur-1][x_cur];
-            int gauche = simi[y_cur][x_cur-1];
-            int diag =  simi[y_cur-1][x_cur-1];
+            int haut = simi.getData(y_cur-1,x_cur);
+            int gauche = simi.getData(y_cur,x_cur-1);
+            int diag =  simi.getData(y_cur-1,x_cur-1);
             // int maxTmp = max(haut, max(gauche, diag));
             
             if (diag >= 0)

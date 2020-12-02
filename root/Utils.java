@@ -8,11 +8,11 @@ import java.util.Scanner;
 import root.dataStuct.Frag;
 
 public class Utils {
-    public static ArrayList<String> readFile()
+    public static ArrayList<String> readFile(String path)
     {
         try 
         {
-            File myObj = new File("../test.txt");
+            File myObj = new File(path);
 
             Scanner myReader = new Scanner(myObj);
 
@@ -100,83 +100,6 @@ public class Utils {
         }
 
         // System.out.println(chars);
-    }
-
-    public static int[][] loadSimiGLo(Frag frag1, Frag frag2)
-    {
-
-        //      f  r  a  g  2
-        //  f
-        //  r
-        //  a
-        //  g
-        //  1
-
-        int [][] ok = new int[frag1.size()+1][frag2.size()+1];
-
-        ok[0][0] = 0;
-
-        for (int i = 1 ; i < frag1.size() ; i ++)
-        {
-            ok[i][0] = 0;
-        }
-        for (int i = 1 ; i < frag2.size() ; i ++)
-        {
-            ok[0][i] = 0;
-        }
-
-        for (int i = 1 ; i < ok.length ; i++)
-        {
-            for (int j = 1 ; j < ok[0].length; j++)
-            {/// match regarde marche pas
-                ok[i][j] = max(
-                                ok[i][j-1]-2,                                    
-                                max(
-                                    ok[i-1][j-1]+pcost(frag1.get(i-1),frag2.get(j-1)),
-                                    ok[i-1][j]-2
-                                    )     
-                                );
-            }
-        }
-
-        // printSimi(ok);
-
-        return ok;
-    }
-    
-    public static void printSimi(int[][] ok)
-    {
-        for (int i = 0 ; i < ok.length ; i++)
-        {
-            for (int j = 0 ; j < ok[0].length ; j++)
-            {
-                System.out.format("%3d",ok[i][j]);
-            }
-            System.out.print("\n");
-        }
-    }
-
-    public static int max(int a, int b)
-    {
-        return (a > b) ? a : b;
-    }
-
-    public static int pcost(byte a,byte b)
-    {
-        return (a == b) ? 1 : -1;
-    }
-
-   
-
-    public static int get_normal(int[][] simi)
-    {
-        int max = simi[0][simi[0].length-1];
-        for(int i = 1 ; i < simi.length ; i++ )
-        {
-            if (simi[i][simi[0].length-1] > max )
-                max = simi[i][simi[0].length-1];
-        }
-        return max;
     }
 
     public static int get_invert(int[][] simi)

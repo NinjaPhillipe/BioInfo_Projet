@@ -28,3 +28,9 @@ BUG : le chemin hamiltinian ne contient 29 des 30 fragments
 
 
 Ajouter complementaire d un chemin est aussi un bon chemin
+
+
+12/12/20
+
+VERIFIER si fg derniere ligne et gf derniere colonne
+VERIFIER LOAD SEMI GLO

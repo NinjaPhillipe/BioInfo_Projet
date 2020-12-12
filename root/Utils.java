@@ -7,7 +7,8 @@ import java.util.Scanner;
 
 import root.dataStuct.Frag;
 
-public class Utils {
+public class Utils 
+{
     public static ArrayList<String> readFile(String path)
     {
         try 
@@ -16,26 +17,26 @@ public class Utils {
 
             Scanner myReader = new Scanner(myObj);
 
-            String res = new String();
-            ArrayList<String> test = new ArrayList<>();
+            String tmp = new String();
+            ArrayList<String> res = new ArrayList<>();
             while (myReader.hasNextLine()) 
             {
                 String data = myReader.nextLine();
                 if(data.charAt(0) == '>')
                 {
-                    if(res.length() > 0)
+                    if(tmp.length() > 0)
                     {
-                        test.add(res);
-                        res = "";
+                        res.add(tmp);
+                        tmp = "";
                     }
                 }
                 else
                 {
-                    res += data;
+                    tmp += data;
                 }
             }
             myReader.close();
-            return test;
+            return res;
 
         } catch (FileNotFoundException e) 
         {
@@ -102,14 +103,5 @@ public class Utils {
         // System.out.println(chars);
     }
 
-    public static int get_invert(int[][] simi)
-    {
-        int max = simi[simi.length-1][0];
-        for(int i = 1 ; i < simi[0].length ; i++ )
-        {
-            if (simi[simi.length-1][i] > max )
-                max = simi[simi.length-1][i];
-        }
-        return max;
-    }
+
 }

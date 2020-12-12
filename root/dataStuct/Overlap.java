@@ -2,11 +2,18 @@ package root.dataStuct;
 
 import root.Simi;
 
+/**
+ * Classe qui represente la partie de superposition pour l'alignement semiglobal
+ */
 public class Overlap extends BitsData
 {
     public static final byte B = (byte) 0b00;
-    public static final byte G1 = (byte) 0b01;
-    public static final byte G2 = (byte) 0b10;
+    public static final byte G1 = (byte) 0b01; /* Gap sur le fragment 1 */
+    public static final byte G2 = (byte) 0b10; /* Gap sur le fragment 2 */
+
+    /* taille de l'overlap sur le fragment 1 */
+    private int frag1_overlap_size = 0;
+    private int frag2_overlap_size = 0;
 
     public Overlap(Simi simi,boolean invert)
     {
@@ -50,11 +57,12 @@ public class Overlap extends BitsData
 
         // car on part de la fin
         int i = this.size-1; 
+        int haut,gauche,diag;
         while (y_cur>0 && x_cur>0)
         {
-            int haut = simi.getData(y_cur-1,x_cur);
-            int gauche = simi.getData(y_cur,x_cur-1);
-            int diag =  simi.getData(y_cur-1,x_cur-1);
+            haut = simi.getData(y_cur-1,x_cur);
+            gauche = simi.getData(y_cur,x_cur-1);
+            diag =  simi.getData(y_cur-1,x_cur-1);
             // int maxTmp = max(haut, max(gauche, diag));
             
             if (diag >= 0)
@@ -62,6 +70,8 @@ public class Overlap extends BitsData
                 x_cur-=1;
                 y_cur-=1;
                 set(i,B);
+                this.frag1_overlap_size ++;
+                this.frag2_overlap_size ++;
             }
             else if (haut > gauche)
             { // haut
@@ -69,6 +79,7 @@ public class Overlap extends BitsData
                 set(i,G2);
                 // on monte dans le tableau 
                 // gap en x
+                this.frag1_overlap_size ++;
             }
             else 
             { // gauche
@@ -76,18 +87,28 @@ public class Overlap extends BitsData
                 set(i,G1);
                 // on va a gauche dans le tableau 
                 // gap en y
+                this.frag2_overlap_size ++;
             }
             i--;
         }
     }
 
+    /**
+     * Fait un parcours du tableau afin de savoir la taille 
+     * de la structure necessaire a allouer afin d'eviter 
+     * les allocations multiple de memoire
+     * @param simi
+     * @param y_cur
+     * @param x_cur
+     */
     private void set_size_needed(Simi simi,int y_cur,int x_cur)
     {
+        int haut,gauche,diag;
         while (y_cur>0 && x_cur>0)
         {
-            int haut = simi.getData(y_cur-1,x_cur);
-            int gauche = simi.getData(y_cur,x_cur-1);
-            int diag =  simi.getData(y_cur-1,x_cur-1);
+            haut = simi.getData(y_cur-1,x_cur);
+            gauche = simi.getData(y_cur,x_cur-1);
+            diag =  simi.getData(y_cur-1,x_cur-1);
             // int maxTmp = max(haut, max(gauche, diag));
             
             if (diag >= 0)
@@ -107,6 +128,33 @@ public class Overlap extends BitsData
                 this.size++;
             }
         }
+    }
+
+    public int get_value()
+    {
+        int res = 0;
+        for (int i = 0 ; i < this.size ; i++)
+        {
+            switch (this.get(i)) 
+            {
+                case B:
+                    res+= 1;
+                    break;
+                case G2:
+                    res+= 1;
+                    break;
+            }
+        }
+        return res;
+    }
+
+    public int get_frag1_overlap_size()
+    {
+        return this.frag1_overlap_size;
+    }
+    public int get_frag2_overlap_size()
+    {
+        return this.frag2_overlap_size;
     }
 
     public String toString()

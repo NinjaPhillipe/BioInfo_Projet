@@ -2,6 +2,9 @@ package root;
 
 import root.dataStuct.Frag;
 
+/**
+ * Tableau de taille variable
+ */
 public class Simi 
 {
     private int[][] data;
@@ -27,6 +30,9 @@ public class Simi
     }
 
 
+    /**
+     * Calcul le tableau semiglobal
+     */
     public void loadSimiGLo(Frag frag1, Frag frag2)
     {
         //      f  r  a  g  2
@@ -36,24 +42,24 @@ public class Simi
         //  g
         //  1
 
+        /* mets les bornes du tableau */
         this.end_i = frag1.size()+1;
         this.end_j = frag2.size()+1;
 
+
+        /* initialise la premiere ligne et la premiere colonne a 0 */
         data[0][0] = 0;
-
         for (int i = 1 ; i < end_i ; i ++)
-        {
             data[i][0] = 0;
-        }
         for (int i = 1 ; i < end_j ; i ++)
-        {
             data[0][i] = 0;
-        }
 
+
+        /* applique la formule vu en cours */
         for (int i = 1 ; i < end_i ; i++)
         {
             for (int j = 1 ; j < end_j ; j++)
-            {/// match regarde marche pas
+            {
                 data[i][j] = max(
                                 data[i][j-1]-2,                                    
                                 max(

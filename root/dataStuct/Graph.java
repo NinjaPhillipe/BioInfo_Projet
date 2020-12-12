@@ -7,7 +7,6 @@ import java.util.Collections;
 
 import root.LListCons;
 import root.Simi;
-import root.Utils;
 
 public class Graph 
 {
@@ -69,30 +68,26 @@ public class Graph
             {
                 if(f != g)
                 {
-                    //generer les 4 matrices 
-                    { // genere le cas f g 
-                        simi.loadSimiGLo(node_data[f][0], node_data[g][0]);
-                        arcs.add(new Arc(f,false,g,false,simi.get_normal(),new Overlap(simi, false)));
-                        arcs.add(new Arc(f,false,g,false,simi.get_invert(),new Overlap(simi, true)));
-                    }
+                    /* generer les 4 matrices */
+                    /* genere le cas f g */
+                    simi.loadSimiGLo(node_data[f][0], node_data[g][0]);
+                    arcs.add(new Arc(f,false,g,false,simi.get_normal(),new Overlap(simi, false)));
+                    arcs.add(new Arc(f,false,g,false,simi.get_invert(),new Overlap(simi, true)));
 
-                    { // genere le cas fp g 
-                        simi.loadSimiGLo(node_data[f][1], node_data[g][0]);
-                        arcs.add(new Arc(f,true,g,false,simi.get_normal(),new Overlap(simi, false)));
-                        arcs.add(new Arc(f,true,g,false,simi.get_invert(),new Overlap(simi, true)));
-                    }
+                    /* genere le cas fp g */
+                    simi.loadSimiGLo(node_data[f][1], node_data[g][0]);
+                    arcs.add(new Arc(f,true,g,false,simi.get_normal(),new Overlap(simi, false)));
+                    arcs.add(new Arc(f,true,g,false,simi.get_invert(),new Overlap(simi, true)));
 
-                    { // genere le cas f gp 
-                        simi.loadSimiGLo(node_data[f][0], node_data[g][1]);
-                        arcs.add(new Arc(f,false,g,true,simi.get_normal(),new Overlap(simi, false)));
-                        arcs.add(new Arc(f,false,g,true,simi.get_invert(),new Overlap(simi, true)));
-                    }
+                    /* genere le cas f gp */
+                    simi.loadSimiGLo(node_data[f][0], node_data[g][1]);
+                    arcs.add(new Arc(f,false,g,true,simi.get_normal(),new Overlap(simi, false)));
+                    arcs.add(new Arc(f,false,g,true,simi.get_invert(),new Overlap(simi, true)));
 
-                    { // genere le cas fp gp 
-                        simi.loadSimiGLo(node_data[f][1], node_data[g][1]);
-                        arcs.add(new Arc(f,true,g,true,simi.get_normal(),new Overlap(simi, false)));
-                        arcs.add(new Arc(f,true,g,true,simi.get_invert(),new Overlap(simi, true)));
-                    }
+                    /* genere le cas fp gp */
+                    simi.loadSimiGLo(node_data[f][1], node_data[g][1]);
+                    arcs.add(new Arc(f,true,g,true,simi.get_normal(),new Overlap(simi, false)));
+                    arcs.add(new Arc(f,true,g,true,simi.get_invert(),new Overlap(simi, true)));
                 }
             }
         }
@@ -115,6 +110,7 @@ public class Graph
         }
         // ON DOIT PAS ARRIVER LA SINON C EST DE LA MERDE
         // throw exception
+        System.out.println("C EST DE LA MERDE");
         return 0;
     } 
 

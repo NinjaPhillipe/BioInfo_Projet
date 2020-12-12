@@ -16,22 +16,27 @@ public class LListCons
 
     private class Node 
     {
-        // ON SUPPOSE QUE LE TABLEAU PREND SUIT LA FORME A C G T
+        // ON SUPPOSE QUE LE TABLEAU PREND LA FORME A C G T
         public int [] acgt= {0,0,0,0};
         
         public Node next;
 
-        public boolean gap = false;
+        public boolean gapG2;
 
         /**
-         * Cree un noeud et le place la donnee dans un dictionnaire
+         * Cree un noeud et le place dans le tableau
          */
         public Node (byte data)
         {
             add_data(data);
             this.next = null;
+            this.gapG2 = false;
         }
 
+        /**
+         * Rajoute actg dans le tableau
+         * @param data
+         */
         public void add_data(byte data)
         {
             switch(data)
@@ -50,7 +55,6 @@ public class LListCons
                     break;
             }
         }
-
         public boolean hasNext()
         {
             return this.next != null;
@@ -80,7 +84,13 @@ public class LListCons
             this.add_frag(get_frag_dst(frags,a),a.overlap);
     }
 
-    public Frag get_frag_dst(Frag[][] frags,Graph.Arc arc) // DOIT PAS ETRE LA
+    /**
+     * Retourne le fragment destination de l'arc
+     * @param frags
+     * @param arc
+     * @return
+     */
+    public Frag get_frag_dst(Frag[][] frags,Graph.Arc arc) // DOIT PAS ETRE LA ???????
     {
         return arc.src_ci ? frags[arc.dest][1] : frags[arc.dest][0];
     }
@@ -95,30 +105,42 @@ public class LListCons
         return this.tail;
     }
 
+    /**
+     * Retire le premier element de la linked list
+     */
     public void removeHead()
     {
-        head = head.next;
-        this.size --;
+        if(this.head != null)
+        {
+            this.head = head.next;
+            this.size --;
+        }
     }
 
+    /**
+     * Ajoute l'element b a la position i 
+     * @param b
+     * @param i
+     */
     public void insert(Node b,int i)
     {
-        if(i==0)
+        if( i > this.size ) return;
+
+        if(i==0) /** si on ajoute en premiere position */
         {
-            b.next = head;
-            head = b;
+            b.next = this.head;
+            this.head = b;
         }else
         {
-            // non safe
-            Node tmp = head;
+            Node tmp = this.head; /* prend le premier element */
             while(i > 1)
             {
                 tmp = tmp.next;
                 i--;
             }
-            Node next = tmp.next;
+            Node follow = tmp.next;
             tmp.next = b;
-            b.next = next; 
+            b.next = follow; 
         }
         this.size++;
     }
@@ -135,7 +157,7 @@ public class LListCons
         {
             this.head = new Node (data);
             this.tail = head;
-            this.size++;
+            this.size = 1;
         }
         else
         {
@@ -147,83 +169,89 @@ public class LListCons
 
     /**
      * Ajoute un fragments dans la liste de consensus
+     * 
+     * FRAG2 est ajouter
      * @param frag
      * @param overlap
      */
     public void add_frag(Frag frag, Overlap overlap)
     {
-        
         // pretraite la partie des octets avant l'overlap
-        int pretrait = this.size - overlap.size();  
-
-        if( pretrait < 0)
-        {
-            // raise error
-            System.exit(23);
-        }
 
         // ABCCD
         //   CCDF
         //   +  
-        while(pretrait > 0)
+        /* pretrait = this.size - overlap.size() c est de la merde */
+        for(int pretrait = this.size - overlap.get_frag1_overlap_size(); pretrait > 0;pretrait--)
         {
             // get Array pretraitre 
-            int [] tmp_acgt = head.acgt;
             String acgt = "ACGT";
 
-            int max = 0;
+            int max = head.acgt[0];
             int index = 0;
-            for (int i = 0 ; i < tmp_acgt.length; i++)
+            for (int i = 1 ; i < head.acgt.length; i++)
             {
-                if (tmp_acgt[i] > max)
+                if (head.acgt[i] > max)
                 {
-                    max = tmp_acgt[i];
+                    max = head.acgt[i];
                     index = i;
                 }
             }
-
             resS += acgt.charAt(index);
 
             removeHead();
-            pretrait--;
         }
         
        
-        System.out.println("add "+overlap.size()+ " "+size );
+        if(overlap.size() > size )
+        {
+            System.out.println("ERROR OVERLAP EST PLUS GRAND "+overlap.size()+ " > "+size );
+        }
         // partie overlap 
         // marche pas besoin d ajouter un mecanisme de propagation des gap entre les paires de comparaison 
         {
-            Node tmp = head;
+            
+            Node tmp = this.head;
+
+            /* Indice des fragments au debut de l'overlap */
+            // int frag1_id = this.size - overlap.get_frag1_overlap_size();
+            int frag2_id = 0;
+
             for(int i = 0 ; i < overlap.size() ; i++)
             {
-                // System.out.println(""+i);
-                if(!tmp.gap) // SERT A RIEN POUR L INSTANT
+                
+                if(tmp!= null/* ERREUR TMP DOIT ETRE VALIDE */)  /* BIDOUILLERIE */
                 {
-                    switch (overlap.get(i))
+                    if(!tmp.gapG2)
                     {
-                        case Overlap.B:
-                            tmp.add_data(frag.get(i));
-                            break;
-                        case Overlap.G1: // gap dans le premier mot
-                            insert(new Node(frag.get(i)), i);
-                            tmp = tmp.next;
-                            tmp.gap = true;
-                            i++; // car on passe deux case lors d un gap
-                            break;
-                        case Overlap.G2: // gap dans le deuxieme mot
-                            tmp.gap = true;
-                            tmp = tmp.next;
-                            tmp.add_data(frag.get(i));
-                            i++; // car on passe deux case lors d un gap
-                            break;
+                        // System.out.println(""+i);
+                        switch (overlap.get(i))
+                        {
+                            case Overlap.B:
+                                tmp.add_data(frag.get(frag2_id));
+
+                                frag2_id ++; /* on passe un element de frag2 */
+                                break;
+                            case Overlap.G1: /* gap dans le premier mot */
+                                /* on ajoute un noeud avec la donnee */
+                                insert(new Node(frag.get(frag2_id)), i); /* QUESTION ? : l'insertion doit se faire juste avant le noeud actuel */
+                                /* On ajoute avant le noeud courant donc pas de passage au suivant */
+                                frag2_id ++; /* on passe un element de frag2 */
+                                break;
+                            case Overlap.G2: /* gap dans le deuxieme mot */
+                                /* On ne doit rien rajouter */
+                                // tmp.add_data(frag.get(frag2_id));
+                                tmp.gapG2 = true;
+                                break;
+                        }
                     }
+                    tmp = tmp.next;
                 }
-                tmp = tmp.next;
             }
         }
 
         // partie de fin
-        for(int i = overlap.size() ; i < frag.size() ; i++)
+        for(int i = overlap.get_frag2_overlap_size() ; i < frag.size() ; i++)
         {  
             this.add_to_end(frag.get(i));
         }

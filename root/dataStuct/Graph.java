@@ -2,41 +2,17 @@ package root.dataStuct;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 
 import root.LListCons;
+import root.MultiThreadAlign;
 import root.Simi;
+import root.dataStuct.Arc;
 
 public class Graph 
 {
-    public class Arc implements Comparable<Arc>
-    {
-        public int src,dest;
-        public boolean src_ci,dst_ci; /* boolean si c est un complementaire inverser */
-        public Overlap overlap;
-        public Arc(int src,boolean src_ci,int dest,boolean dst_ci,Overlap overlap)
-        {
-            this.src     = src;
-            this.src_ci  = src_ci;
-            this.dst_ci  = dst_ci;
-            this.dest    = dest;
-            this.overlap = overlap;
-        }
-
-        @Override 
-        public int compareTo(Arc arc)
-        {
-            // reversed
-            return arc.overlap.weight - this.overlap.weight;
-        }
-
-        public String toString()
-        {
-            return this.src+" -> "+this.dest+" inv("+this.src_ci+"|"+this.dst_ci+") weigth "+this.overlap.weight+" frag1over "+overlap.get_frag1_overlap_size()+" frag2over "+overlap.get_frag2_overlap_size();
-        }
-    }
-
     private int n_node;
     private Frag[][] node_data;
     private ArrayList<Arc> arcs; 
@@ -57,45 +33,82 @@ public class Graph
      */
     private void computeArc()
     {
-        // pour allouer une seule fois la memoire
-        Simi simi = new Simi(700);
-        Frag f1,f2,f1p,f2p;
-        // pour chaque noeud 
-        for(int f = 0; f < node_data.length ; f++ )
+        /* SETUP CORES */
+        int cores = Runtime.getRuntime().availableProcessors();
+        MultiThreadAlign threads[] = new MultiThreadAlign[cores];
+
+        int prob_size = node_data.length;
+
+        int start = 0;
+        int end = prob_size/cores;
+
+        for(int i = 0 ; i < cores ; i++)
         {
-            System.out.println(f+"/"+node_data.length);
-            // pour chaque autre noeud
-            for(int g = 0; g < node_data.length ; g++ )
-            {
-                if(f != g)
-                {
-                    f1 = node_data[f][0];
-                    f2 = node_data[g][0];
-                    f1p = node_data[f][1];
-                    f2p = node_data[g][1];
-                    /* generer les 4 matrices */
-                    /* genere le cas f g */
-                    simi.loadSimiGLo(f1,f2); /* LE POIDS C EST VRAIMENT DU CACA MVA MANGER TES MORTS */
-                    arcs.add(new Arc(f,false,g,false,new Overlap(simi, false,f1,f2)));
-                    arcs.add(new Arc(f,false,g,false,new Overlap(simi, true,f1,f2)));
 
-                    /* genere le cas fp g */
-                    simi.loadSimiGLo(f1p, f2);
-                    arcs.add(new Arc(f,true,g,false,new Overlap(simi, false,f1p,f2)));
-                    arcs.add(new Arc(f,true,g,false,new Overlap(simi, true,f1p,f2)));
-
-                    /* genere le cas f gp */
-                    simi.loadSimiGLo(f1, f2p);
-                    arcs.add(new Arc(f,false,g,true,new Overlap(simi, false,f1,f2p)));
-                    arcs.add(new Arc(f,false,g,true,new Overlap(simi, true,f1,f2p)));
-
-                    /* genere le cas fp gp */
-                    simi.loadSimiGLo(f1p,f2p);
-                    arcs.add(new Arc(f,true,g,true,new Overlap(simi, false,f1p,f2p)));
-                    arcs.add(new Arc(f,true,g,true,new Overlap(simi, true,f1p,f2p)));
-                }
-            }
+            threads[i] = new MultiThreadAlign(i,start,end,node_data);
+            start = end;
+            if(i == cores-2)
+                end = prob_size;
+            else 
+                end   = end+(prob_size/cores); 
+            threads[i].start();
         }
+
+        for(MultiThreadAlign t : threads)
+        {
+            t.join();
+        }
+        for(MultiThreadAlign t : threads)
+        {
+            arcs.addAll(t.getArcs());
+        }
+        
+
+
+        
+
+
+        // // pour allouer une seule fois la memoire
+        // Simi simi = new Simi(700);
+        // Frag f1,f2,f1p,f2p;
+        // // pour chaque noeud 
+        // for(int f = 0; f < node_data.length ; f++ )
+        // {
+        //     System.out.println(f+"/"+node_data.length);
+        //     // pour chaque autre noeud
+        //     for(int g = 0; g < node_data.length ; g++ )
+        //     {
+        //         if(f != g)
+        //         {
+        //             f1 = node_data[f][0];
+        //             f2 = node_data[g][0];
+        //             f1p = node_data[f][1];
+        //             f2p = node_data[g][1];
+        //             /* generer les 4 matrices */
+        //             /* genere le cas f g */
+        //             simi.loadSimiGLo(f1,f2); /* LE POIDS C EST VRAIMENT DU CACA MVA MANGER TES MORTS */
+        //             arcs.add(new Arc(f,false,g,false,new Overlap(simi, false,f1,f2)));
+        //             arcs.add(new Arc(f,false,g,false,new Overlap(simi, true,f1,f2)));
+
+        //             /* genere le cas fp g */
+        //             simi.loadSimiGLo(f1p, f2);
+        //             arcs.add(new Arc(f,true,g,false,new Overlap(simi, false,f1p,f2)));
+        //             arcs.add(new Arc(f,true,g,false,new Overlap(simi, true,f1p,f2)));
+
+        //             /* genere le cas f gp */
+        //             simi.loadSimiGLo(f1, f2p);
+        //             arcs.add(new Arc(f,false,g,true,new Overlap(simi, false,f1,f2p)));
+        //             arcs.add(new Arc(f,false,g,true,new Overlap(simi, true,f1,f2p)));
+
+        //             /* genere le cas fp gp */
+        //             simi.loadSimiGLo(f1p,f2p);
+        //             arcs.add(new Arc(f,true,g,true,new Overlap(simi, false,f1p,f2p)));
+        //             arcs.add(new Arc(f,true,g,true,new Overlap(simi, true,f1p,f2p)));
+        //         }
+        //     }
+        // }
+
+        System.out.println(arcs.size());
     }
     
     /**

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import root.dataStuct.Frag;
 import root.dataStuct.Graph;
 import root.dataStuct.Overlap;
+import root.dataStuct.Arc;
 
 public class LListCons
 {
@@ -59,10 +60,6 @@ public class LListCons
         {
             return this.next != null;
         }
-        public Node getNext()
-        {
-            return this.next;
-        }
     }
 
     /**
@@ -70,7 +67,7 @@ public class LListCons
      * @param frags 
      * @param arcs chemin hamiltonian triee selon l'ordre des arcs
      */
-    public LListCons(Frag[][] frags,ArrayList<Graph.Arc> arcs)
+    public LListCons(Frag[][] frags,ArrayList<Arc> arcs)
     {
         // prend le premier fragments inverser ou non
         Frag firstFrag = arcs.get(0).src_ci ? frags[arcs.get(0).src][1] : frags[arcs.get(0).src][0];
@@ -80,7 +77,7 @@ public class LListCons
             this.add_to_end(firstFrag.get(i));
 
         // ajoute les autres fragments
-        for(Graph.Arc a : arcs)
+        for(Arc a : arcs)
             this.add_frag(get_frag_dst(frags,a),a.overlap);
     }
 
@@ -90,7 +87,7 @@ public class LListCons
      * @param arc
      * @return
      */
-    public Frag get_frag_dst(Frag[][] frags,Graph.Arc arc) // DOIT PAS ETRE LA ???????
+    public Frag get_frag_dst(Frag[][] frags,Arc arc) // DOIT PAS ETRE LA ???????
     {
         return arc.dst_ci ? frags[arc.dest][1] : frags[arc.dest][0];
     }

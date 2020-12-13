@@ -12,14 +12,15 @@ public class Graph
 {
     public class Arc implements Comparable<Arc>
     {
-        public int src,dest,weight;
-        public boolean src_ci,dst_ci; // complementaire inverser
+        public int src,dest;
+        public boolean src_ci,dst_ci; /* boolean si c est un complementaire inverser */
         public Overlap overlap;
-        public Arc(int src,boolean src_ci,int dest,boolean dst_ci,int weight,Overlap overlap)
+        public Arc(int src,boolean src_ci,int dest,boolean dst_ci,Overlap overlap)
         {
-            this.src = src;
-            this.dest = dest;
-            this.weight = weight;
+            this.src     = src;
+            this.src_ci  = src_ci;
+            this.dst_ci  = dst_ci;
+            this.dest    = dest;
             this.overlap = overlap;
         }
 
@@ -27,18 +28,17 @@ public class Graph
         public int compareTo(Arc arc)
         {
             // reversed
-            return arc.weight - this.weight;
+            return arc.overlap.weight - this.overlap.weight;
         }
 
         public String toString()
         {
-            return this.src+" -> "+this.dest+" inv("+this.src_ci+"|"+this.dst_ci+") weigth "+this.weight;
+            return this.src+" -> "+this.dest+" inv("+this.src_ci+"|"+this.dst_ci+") weigth "+this.overlap.weight+" frag1over "+overlap.get_frag1_overlap_size()+" frag2over "+overlap.get_frag2_overlap_size();
         }
     }
 
     private int n_node;
     private Frag[][] node_data;
-    // private ArrayList<ArrayList<Arc>> arcs;
     private ArrayList<Arc> arcs; 
 
     public Graph(Frag[][] frags)
@@ -59,6 +59,7 @@ public class Graph
     {
         // pour allouer une seule fois la memoire
         Simi simi = new Simi(700);
+        Frag f1,f2,f1p,f2p;
         // pour chaque noeud 
         for(int f = 0; f < node_data.length ; f++ )
         {
@@ -68,26 +69,30 @@ public class Graph
             {
                 if(f != g)
                 {
+                    f1 = node_data[f][0];
+                    f2 = node_data[g][0];
+                    f1p = node_data[f][1];
+                    f2p = node_data[g][1];
                     /* generer les 4 matrices */
                     /* genere le cas f g */
-                    simi.loadSimiGLo(node_data[f][0], node_data[g][0]);
-                    arcs.add(new Arc(f,false,g,false,simi.get_normal(),new Overlap(simi, false)));
-                    arcs.add(new Arc(f,false,g,false,simi.get_invert(),new Overlap(simi, true)));
+                    simi.loadSimiGLo(f1,f2); /* LE POIDS C EST VRAIMENT DU CACA MVA MANGER TES MORTS */
+                    arcs.add(new Arc(f,false,g,false,new Overlap(simi, false,f1,f2)));
+                    arcs.add(new Arc(f,false,g,false,new Overlap(simi, true,f1,f2)));
 
                     /* genere le cas fp g */
-                    simi.loadSimiGLo(node_data[f][1], node_data[g][0]);
-                    arcs.add(new Arc(f,true,g,false,simi.get_normal(),new Overlap(simi, false)));
-                    arcs.add(new Arc(f,true,g,false,simi.get_invert(),new Overlap(simi, true)));
+                    simi.loadSimiGLo(f1p, f2);
+                    arcs.add(new Arc(f,true,g,false,new Overlap(simi, false,f1p,f2)));
+                    arcs.add(new Arc(f,true,g,false,new Overlap(simi, true,f1p,f2)));
 
                     /* genere le cas f gp */
-                    simi.loadSimiGLo(node_data[f][0], node_data[g][1]);
-                    arcs.add(new Arc(f,false,g,true,simi.get_normal(),new Overlap(simi, false)));
-                    arcs.add(new Arc(f,false,g,true,simi.get_invert(),new Overlap(simi, true)));
+                    simi.loadSimiGLo(f1, f2p);
+                    arcs.add(new Arc(f,false,g,true,new Overlap(simi, false,f1,f2p)));
+                    arcs.add(new Arc(f,false,g,true,new Overlap(simi, true,f1,f2p)));
 
                     /* genere le cas fp gp */
-                    simi.loadSimiGLo(node_data[f][1], node_data[g][1]);
-                    arcs.add(new Arc(f,true,g,true,simi.get_normal(),new Overlap(simi, false)));
-                    arcs.add(new Arc(f,true,g,true,simi.get_invert(),new Overlap(simi, true)));
+                    simi.loadSimiGLo(f1p,f2p);
+                    arcs.add(new Arc(f,true,g,true,new Overlap(simi, false,f1p,f2p)));
+                    arcs.add(new Arc(f,true,g,true,new Overlap(simi, true,f1p,f2p)));
                 }
             }
         }
@@ -207,7 +212,7 @@ public class Graph
         return sorted;
     }
 
-    public ArrayList<String> hamiltonian()
+    public ArrayList<String> doall()
     {
         System.out.println("Start Hamiltonian");
 
@@ -222,8 +227,8 @@ public class Graph
         }
 
         LListCons consensus = new LListCons(this.node_data, res);
-        System.out.println(consensus.resS);
-        System.out.println(consensus.resS.length());
+        // System.out.println(consensus.resS);
+        System.out.println("Res length : "+consensus.resS.length());
 
         try {
             FileWriter myWriter = new FileWriter("../output/output.fasta");

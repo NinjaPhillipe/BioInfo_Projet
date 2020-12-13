@@ -83,12 +83,12 @@ public class MainBioInfo
 
 
         // TEST ALL
-        ArrayList<String> frags_str = Utils.readFile("../output/collection4.fasta");
+        ArrayList<String> frags_str = Utils.readFile("../output/collection1.fasta");
 
         Frag[][] frags = Utils.do_all_frag(frags_str);
         Graph g = new Graph(frags);
 
-        g.hamiltonian();
+        g.doall();
 
     }
 }

@@ -34,3 +34,12 @@ Ajouter complementaire d un chemin est aussi un bon chemin
 
 VERIFIER si fg derniere ligne et gf derniere colonne
 VERIFIER LOAD SEMI GLO
+
+FUSIONNER LES GAPS
+si il le noeud est deja marquer gaps et qu on a un gap haut 
+
+        a
+        _
+         _ 
+         c
+rajouter dans le meme

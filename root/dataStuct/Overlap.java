@@ -7,15 +7,17 @@ import root.Simi;
  */
 public class Overlap extends BitsData
 {
-    public static final byte B = (byte) 0b00;
+    public static final byte B  = (byte) 0b00;
     public static final byte G1 = (byte) 0b01; /* Gap sur le fragment 1 */
     public static final byte G2 = (byte) 0b10; /* Gap sur le fragment 2 */
+
+    public int weight = 0;
 
     /* taille de l'overlap sur le fragment 1 */
     private int frag1_overlap_size = 0;
     private int frag2_overlap_size = 0;
 
-    public Overlap(Simi simi,boolean invert)
+    public Overlap(Simi simi,boolean invert,Frag f1,Frag f2)
     {
         int max,y_cur,x_cur;
         if(invert)
@@ -72,6 +74,15 @@ public class Overlap extends BitsData
                 set(i,B);
                 this.frag1_overlap_size ++;
                 this.frag2_overlap_size ++;
+
+                /* si egale weight +1 sinon weight -1 */
+                if(f1.get(y_cur) == f2.get(x_cur) )
+                {
+                    weight++;
+                }else
+                {
+                    weight--;
+                }
             }
             else if (haut > gauche)
             { // haut
@@ -79,7 +90,8 @@ public class Overlap extends BitsData
                 set(i,G2);
                 // on monte dans le tableau 
                 // gap en x
-                this.frag1_overlap_size ++;
+                this.frag1_overlap_size ++; 
+                weight-=2;
             }
             else 
             { // gauche
@@ -88,6 +100,7 @@ public class Overlap extends BitsData
                 // on va a gauche dans le tableau 
                 // gap en y
                 this.frag2_overlap_size ++;
+                weight-=2;
             }
             i--;
         }

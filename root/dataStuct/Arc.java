@@ -19,7 +19,7 @@ public class Arc implements Comparable<Arc>
     public int compareTo(Arc arc)
     {
         /* reversed */
-        return arc.weight - this.weight;
+        return  this.weight - arc.weight;
     }
 
     public String toString()

@@ -61,7 +61,6 @@ public class Graph
         {
             arcs.addAll(t.getArcs());
         }
-        
 
 
         
@@ -148,45 +147,54 @@ public class Graph
             in[i]=0;
             out[i]=0;
             // MAKESET
-            // make_set.set(i, new ArrayList<Integer>());
             make_set.add(new ArrayList<Integer>());
             make_set.get(i).add(i);
         }
+        
 
         // tri arc
-        Collections.sort(this.arcs);
+        Collections.sort(this.arcs,Collections.reverseOrder());
 
         ArrayList<Arc> res = new ArrayList<>();
         
         // premier noeud passe entree interdite car sinon cycle
-        in[this.arcs.get(0).src] = 1;
+        // in[this.arcs.get(0).src] = 1;
+
+        /* AMELIORATION ON PEUT BRISER LE PLUS PETIT ARC DU CYCLE */
 
         // System.out.println("nbr arc "+ arcs.size());
         for(Arc arc: this.arcs)
         {
             /* && FINDSET(f)!=FINDSET(g) */
-            if(in[arc.dest]==0 && out[arc.src]==0 && findSet(make_set, arc.src)!=findSet(make_set, arc.dest) )
+            int set_src = findSet(make_set, arc.src);
+            int set_dst = findSet(make_set, arc.dest);
+            if(in[arc.dest]==0 && out[arc.src]==0 && set_src!=set_dst )
             {
                 // SELECT(f,g)
+
+                // if()
                 res.add(arc);
 
                 in[arc.dest] = 1;
                 out[arc.src] = 1;
 
-                // UNION(FINDSET(f),FINDSET(g))
-                {
-                    // trouve les id des set
-                    int a = findSet(make_set, arc.src);
-                    int b = findSet(make_set, arc.dest);
-
-                    // union des set
-                    make_set.get(a).addAll(make_set.get(b));
-                    make_set.remove(b);
-                }
+                /* UNION(FINDSET(f),FINDSET(g)) */
+                make_set.get(set_src).addAll(make_set.get(set_dst));
+                make_set.remove(set_dst);
             }
             if(make_set.size() == 1)
             {
-                return res;
+                /* prends le premier arc du chemin hamiltonien */
+                for(int i = 0 ; i < in.length ; i++)
+                {
+                    if(in[i] == 0)
+                    {
+                        /* sort hamiltonian */
+                        return sortHamiltonian(res, i);
+                    }
+                }
+                System.out.println("PAS DE DEBUT AU CHEMIN HAMILTONIEN");
+                
             }
         }
         // ERROR
@@ -194,12 +202,39 @@ public class Graph
         return null;
     }
 
-    private ArrayList<Arc> sortHamiltonian(ArrayList<Arc> chemin)
+    /**
+     * 
+     * @param chemin
+     * @param i id de la source du premier arc du chemin hamiltonien
+     * @return
+     */
+    private ArrayList<Arc> sortHamiltonian(ArrayList<Arc> chemin,int i)
     {
         ArrayList<Arc> sorted = new ArrayList<>(chemin.size());
 
-        sorted.add(chemin.get(0)); // PAS BON ON NE SAIT PAS SI LE PREMIER EST LE DEBUT DU CHEMIN HAMILTONIAN
-        int current = chemin.remove(0).dest;
+        /* cherche le premier arc du chemin */
+        Arc start = null;
+        for(Arc arc : chemin)
+        {
+            if(arc.src == i)
+            {
+                System.out.println("SRC HAMILT : "+arc);
+                start = arc;
+            }
+        }
+        if(start == null)
+        {
+            System.out.println("PAS DE DEBUT DE CHEMIN HAMILTONIEN TROUVER");
+            System.exit(1);
+        }else
+        {
+            sorted.add(start);
+            chemin.remove(start);
+        }
+
+        // sorted.add(chemin.get(0)); /* PAS BON ON NE SAIT PAS SI LE PREMIER EST LE DEBUT DU CHEMIN HAMILTONIAN */
+        // int current = chemin.remove(0).dest;
+        int current = start.dest;
         while(!chemin.isEmpty())
         {
             // System.out.println(""+current);
@@ -227,15 +262,15 @@ public class Graph
 
         ArrayList<Arc> chemin =  this.get_hamiltonian();
 
-        ArrayList<Arc> res = sortHamiltonian(chemin);
+        // ArrayList<Arc> res = sortHamiltonian(chemin);
 
         //print arc 
-        for (Arc arc : res )
+        for (Arc arc : chemin )
         {
             System.out.println(arc);
         }
 
-        LListCons consensus = new LListCons(this.node_data, res);
+        LListCons consensus = new LListCons(this.node_data, chemin);
         // System.out.println(consensus.resS);
         System.out.println("Res length : "+consensus.resS.length());
 

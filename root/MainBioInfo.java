@@ -82,7 +82,7 @@ public class MainBioInfo
 
 
         // TEST ALL
-        ArrayList<String> frags_str = Utils.readFile("../output/collection2S.fasta");
+        ArrayList<String> frags_str = Utils.readFile("../output/collection1.fasta");
         System.out.println("SIZE AFTER LOAD : "+frags_str.size());
         Frag[][] frags = Utils.do_all_frag(frags_str);
         Graph g = new Graph(frags);

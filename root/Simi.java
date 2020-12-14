@@ -104,19 +104,21 @@ public class Simi
                                                                     b[i-1][j-1],
                                                                     c[i-1][j-1]);
 
-                b[i][j] = max(  -(h+g)+ a[i][j-1],
-                                -g+b[i][j-1],
-                                -(h+g)+c[i][j-1]);
                 
-                c[i][j] = max(  -(h+g)+a[i-1][j],
-                                -(h+g)+b[i-1][j],
-                                -g+c[i-1][j]);
+                b[i][j] = max(  a[i][j-1]==Integer.MIN_VALUE?Integer.MIN_VALUE:-(h+g)+ a[i][j-1],
+                                b[i][j-1]==Integer.MIN_VALUE?Integer.MIN_VALUE:-g+b[i][j-1],
+                                c[i][j-1]==Integer.MIN_VALUE?Integer.MIN_VALUE:-(h+g)+c[i][j-1]);
+                
+                c[i][j] = max(  a[i-1][j]==Integer.MIN_VALUE?Integer.MIN_VALUE:-(h+g)+a[i-1][j],
+                                b[i-1][j]==Integer.MIN_VALUE?Integer.MIN_VALUE:-(h+g)+b[i-1][j],
+                                c[i-1][j]==Integer.MIN_VALUE?Integer.MIN_VALUE:-g+c[i-1][j]);
 
                 simi[i][j] = max(a[i][j],b[i][j],c[i][j]);
             }
         }
         // printSimi(ok);
     }
+    
 
     public void printSimi()
     {

@@ -1,6 +1,5 @@
 package root;
-import java. util. ArrayList;
-
+import java.util.ArrayList;
 import root.dataStuct.Frag;
 import root.dataStuct.Graph;
 
@@ -83,12 +82,10 @@ public class MainBioInfo
 
 
         // TEST ALL
-        ArrayList<String> frags_str = Utils.readFile("../output/collection1.fasta");
-
+        ArrayList<String> frags_str = Utils.readFile("../output/Collection1S.fasta");
         Frag[][] frags = Utils.do_all_frag(frags_str);
         Graph g = new Graph(frags);
 
         g.doall();
-
     }
 }

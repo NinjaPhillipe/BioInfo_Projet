@@ -195,8 +195,7 @@ public class LListCons
                     }
                 }
 
-                if(max > 1) /* contante bullshit pour pas rajouter nimp */
-                    resS += acgt.charAt(index);
+                resS += acgt.charAt(index);
 
                 removeHead();
             }
@@ -221,7 +220,7 @@ public class LListCons
                     switch (overlap.get(i))
                     {
                         case Overlap.B:/* cas superposition */
-                            if(!tmp.gapG2)/* si le gap est dans le mots qu on veut ajouter. */
+                            if(!tmp.gapG2 )/* si le gap est dans le mots qu on veut ajouter. */
                             {
                                 tmp.add_data(frag.get(frag2_id));
 
@@ -229,7 +228,7 @@ public class LListCons
                             }
                             break;
                         case Overlap.G1: /* gap dans le premier mot */
-                            if(!tmp.gapG2)/* si le gap est dans le mots qu on veut ajouter. */
+                            if(!tmp.gapG2 )/* si le gap est dans le mots qu on veut ajouter. */
                             {
                                 /* on ajoute un noeud avec la donnee */
                                 insert(new Node(frag.get(frag2_id)), i); /* QUESTION ? : l'insertion doit se faire juste avant le noeud actuel */
@@ -242,7 +241,7 @@ public class LListCons
                             }
                             break;
                         case Overlap.G2: /* gap dans le deuxieme mot */
-                            if(!tmp.gapG2)/* si le gap est dans le mots qu on veut ajouter. */
+                            if(!tmp.gapG2 )/* si le gap est dans le mots qu on veut ajouter. */
                             {
                                 /* On ne doit rien rajouter */
                                 // tmp.add_data(frag.get(frag2_id));

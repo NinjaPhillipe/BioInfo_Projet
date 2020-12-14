@@ -19,6 +19,7 @@ public class Overlap extends BitsData
 
     public Overlap(Simi simi,boolean invert,Frag f1,Frag f2)
     {
+        /* place les curseurs dans la matrice */
         int max,y_cur,x_cur;
         if(invert)
         {
@@ -36,8 +37,9 @@ public class Overlap extends BitsData
         }else
         {
             x_cur = simi.getEnd_j()-1;
-            max = simi.getData(0,x_cur);
             y_cur = 0;
+            max = simi.getData(y_cur,x_cur);
+            
             for(int i = 1 ; i < simi.getEnd_i() ; i++ )
             {
                 if (simi.getData(i,x_cur) > max )
@@ -50,15 +52,15 @@ public class Overlap extends BitsData
         
         /* 
         Iteration afin de determiner la taille de structure de donnees 
-        afin d eviter de devoir allouer plusieurs fois la memoire
+        afin d'eviter de devoir allouer plusieurs fois la memoire
         */
         set_size_needed(simi,y_cur,x_cur);
        
-        // alloue la memoire dont ont a besoin
+        /* alloue la memoire dont ont a besoin */
         alloc_data();
 
-        // car on part de la fin
-        int i = this.size-1; 
+        /* car on part de la fin */
+        int bitsCurs = this.size-1; 
         int haut,gauche,diag;
         while (y_cur>0 && x_cur>0)
         {
@@ -71,7 +73,7 @@ public class Overlap extends BitsData
             { // diag
                 x_cur-=1;
                 y_cur-=1;
-                set(i,B);
+                set(bitsCurs,B);
                 this.frag1_overlap_size ++;
                 this.frag2_overlap_size ++;
 
@@ -87,7 +89,7 @@ public class Overlap extends BitsData
             else if (haut > gauche)
             { // haut
                 y_cur-=1;
-                set(i,G2);
+                set(bitsCurs,G2);
                 // on monte dans le tableau 
                 // gap en x
                 this.frag1_overlap_size ++; 
@@ -96,14 +98,18 @@ public class Overlap extends BitsData
             else 
             { // gauche
                 x_cur-=1;
-                set(i,G1);
+                set(bitsCurs,G1);
                 // on va a gauche dans le tableau 
                 // gap en y
                 this.frag2_overlap_size ++;
                 weight-=2;
             }
-            i--;
+            bitsCurs--;
         }
+
+        /* WEIGHT DEFINITION */
+        // if(invert) weight   = simi.get_invert();
+        // else weight         = simi.get_normal();
     }
 
     /**

@@ -17,7 +17,7 @@ public class Arc implements Comparable<Arc>
     @Override 
     public int compareTo(Arc arc)
     {
-        // reversed
+        /* reversed */
         return arc.overlap.weight - this.overlap.weight;
     }
 

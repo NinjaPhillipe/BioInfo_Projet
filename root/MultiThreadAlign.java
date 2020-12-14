@@ -49,7 +49,7 @@ public class MultiThreadAlign implements Runnable
 
         // pour allouer une seule fois la memoire
         Simi simi = new Simi(700);
-        Frag f1,f2,f1p,f2p;
+        Frag f1,g1,fp,gp;
         // pour chaque noeud 
         System.out.println("Thread : "+id+" s->e "+start+" -> "+end);
         for(int f = start; f <= end ; f++ )
@@ -61,29 +61,29 @@ public class MultiThreadAlign implements Runnable
                 if(f != g)
                 {
                     f1 = node_data[f][0];
-                    f2 = node_data[g][0];
-                    f1p = node_data[f][1];
-                    f2p = node_data[g][1];
+                    g1 = node_data[g][0];
+                    fp = node_data[f][1];
+                    gp = node_data[g][1];
                     /* generer les 4 matrices */
                     /* genere le cas f g */
-                    simi.loadSimiGLo(f1,f2); /* LE POIDS C EST VRAIMENT DU CACA MVA MANGER TES MORTS */
-                    arcs.add(new Arc(f,false,g,false,new Overlap(simi, false,f1,f2)));
-                    arcs.add(new Arc(f,false,g,false,new Overlap(simi, true,f1,f2)));
-
-                    /* genere le cas fp g */
-                    simi.loadSimiGLo(f1p, f2);
-                    arcs.add(new Arc(f,true,g,false,new Overlap(simi, false,f1p,f2)));
-                    arcs.add(new Arc(f,true,g,false,new Overlap(simi, true,f1p,f2)));
+                    simi.loadSimiGLo(f1,g1); /* LE POIDS C EST VRAIMENT DU CACA MVA MANGER TES MORTS */
+                    arcs.add(new Arc(f,false,g,false,new Overlap(simi, false,f1,g1))); /*f->g*/ 
+                    arcs.add(new Arc(g,false,f,false,new Overlap(simi, true,f1,g1))); /*g->f*/
 
                     /* genere le cas f gp */
-                    simi.loadSimiGLo(f1, f2p);
-                    arcs.add(new Arc(f,false,g,true,new Overlap(simi, false,f1,f2p)));
-                    arcs.add(new Arc(f,false,g,true,new Overlap(simi, true,f1,f2p)));
+                    simi.loadSimiGLo(f1, gp);
+                    arcs.add(new Arc(f,false,g,true,new Overlap(simi, false,f1,gp)));/*f->gp*/ 
+                    arcs.add(new Arc(g,false,f,true,new Overlap(simi, true,f1,gp)));/*gp->f*/
+
+                    /* genere le cas fp g */
+                    simi.loadSimiGLo(fp, g1);
+                    arcs.add(new Arc(f,true,g,false,new Overlap(simi, false,fp,g1)));/*fp->g*/ 
+                    arcs.add(new Arc(g,true,f,false,new Overlap(simi, true,fp,g1)));/*g->fp*/
 
                     /* genere le cas fp gp */
-                    simi.loadSimiGLo(f1p,f2p);
-                    arcs.add(new Arc(f,true,g,true,new Overlap(simi, false,f1p,f2p)));
-                    arcs.add(new Arc(f,true,g,true,new Overlap(simi, true,f1p,f2p)));
+                    simi.loadSimiGLo(fp,gp);
+                    arcs.add(new Arc(f,true,g,true,new Overlap(simi, false,fp,gp)));/*fp->gp*/ 
+                    arcs.add(new Arc(g,true,f,true,new Overlap(simi, true,fp,gp)));/*gp->fp*/
                 }
             }
         }

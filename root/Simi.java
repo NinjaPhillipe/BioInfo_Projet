@@ -110,6 +110,8 @@ public class Simi
     public int getEnd_j() { return end_j; }
     public int getData(int i,int j) 
     {
-        return data[i][j];
+        if(i <= end_i && j<= end_j) 
+            return data[i][j];
+        return 0; /* ERROR */
     }
 }

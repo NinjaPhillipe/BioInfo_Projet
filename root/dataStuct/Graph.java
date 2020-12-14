@@ -7,7 +7,6 @@ import java.util.Collections;
 
 import root.LListCons;
 import root.MultiThreadAlign;
-import root.Simi;
 
 public class Graph 
 {

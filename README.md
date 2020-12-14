@@ -45,5 +45,10 @@ si il le noeud est deja marquer gaps et qu on a un gap haut
 rajouter dans le meme
 
 
+AJOUTER PENALITE DES GAPS
+
+OVERLAP PAS SUR QUE MARCHE BIEN DANS LES DEUX SENS
+
+
 https://search.maven.org/artifact/org.hamcrest/hamcrest-core/1.3/jar
 https://search.maven.org/search?q=g:junit%20AND%20a:junit

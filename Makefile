@@ -1,4 +1,4 @@
-FILE = root/MainBioInfo.java  root/test/TestAll.java
+FILE = root/MainBioInfo.java
 JUNIT = libs/junit-4.13.1.jar
 HAMCREST = libs/hamcrest-core-1.3.jar
 TEST = root/test/Test.java

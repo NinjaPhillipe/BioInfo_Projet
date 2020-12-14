@@ -180,12 +180,11 @@ public class LListCons
         /* pretraite la partie des octets avant l'overlap */
         {
             String acgt = "ACGT";
-            int max,index;
             for(int pretrait = this.size - overlap.get_frag1_overlap_size(); pretrait > 0;pretrait--)
             {
                 /* cherche la lettre la plus frequente */
-                max = head.acgt[0];
-                index = 0;
+                int max = head.acgt[0];
+                int index = 0;
                 for (int i = 1 ; i < head.acgt.length; i++)
                 {
                     if (head.acgt[i] > max)
@@ -203,7 +202,8 @@ public class LListCons
         
        
         if(overlap.size() > size ) System.out.println("ERROR OVERLAP EST PLUS GRAND "+overlap.size()+ " > "+size ); /* BIDOUILLERIE */
-        // partie overlap 
+
+        /* partie overlap */
         // marche pas besoin d ajouter un mecanisme de propagation des gap entre les paires de comparaison 
         {
             
@@ -244,7 +244,7 @@ public class LListCons
                             if(!tmp.gapG2 )/* si le gap est dans le mots qu on veut ajouter. */
                             {
                                 /* On ne doit rien rajouter */
-                                // tmp.add_data(frag.get(frag2_id));
+                                tmp.add_data(frag.get(frag2_id));
                                 tmp.gapG2 = true;
                             }
                             break;

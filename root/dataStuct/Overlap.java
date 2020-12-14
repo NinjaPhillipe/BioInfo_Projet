@@ -1,6 +1,7 @@
 package root.dataStuct;
 
 import root.Simi;
+import root.Utils;
 
 /**
  * Classe qui represente la partie de superposition pour l'alignement semiglobal
@@ -15,24 +16,24 @@ public class Overlap extends BitsData
     private int frag1_overlap_size = 0;
     private int frag2_overlap_size = 0;
 
-    public Overlap(Simi simi,boolean invert,Frag f1,Frag f2)
+    public Overlap(Simi simi,boolean invert)
     {
         /* place les curseurs dans la matrice */
         int max,y_cur,x_cur;
-        if(invert)
+        if(invert) /* f->g derniere ligne */
         {
             y_cur = simi.getEnd_i()-1;
             max = simi.getData(y_cur,0);
             x_cur = 0;
-            for(int i = 1 ; i < simi.getEnd_j() ; i++ )
+            for(int j = 1 ; j < simi.getEnd_j() ; j++ )
             {
-                if (simi.getData(y_cur,i) > max )
+                if (simi.getData(y_cur,j) > max )
                 {
-                    max = simi.getData(y_cur,i);
-                    x_cur = i;
+                    max = simi.getData(y_cur,j);
+                    x_cur = j;
                 }
             }
-        }else
+        }else/* g->f derniere colonne */
         {
             x_cur = simi.getEnd_j()-1;
             y_cur = 0;
@@ -65,9 +66,9 @@ public class Overlap extends BitsData
             haut = simi.getData(y_cur-1,x_cur);
             gauche = simi.getData(y_cur,x_cur-1);
             diag =  simi.getData(y_cur-1,x_cur-1);
-            // int maxTmp = max(haut, max(gauche, diag));
+            int maxTmp = Utils.max(haut, gauche, diag);
             
-            if (diag >= 0)
+            if (diag == maxTmp)
             { // diag
                 x_cur-=1;
                 y_cur-=1;
@@ -111,9 +112,9 @@ public class Overlap extends BitsData
             haut = simi.getData(y_cur-1,x_cur);
             gauche = simi.getData(y_cur,x_cur-1);
             diag =  simi.getData(y_cur-1,x_cur-1);
-            // int maxTmp = max(haut, max(gauche, diag));
+            int maxTmp = Utils.max(haut,gauche, diag);
             
-            if (diag >= 0)
+            if (diag == maxTmp)
             { // diag
                 x_cur-=1;
                 y_cur-=1;
@@ -181,6 +182,6 @@ public class Overlap extends BitsData
                     break;
             }
         }
-        return res;
+        return res+"\n "+frag1_overlap_size+" "+frag2_overlap_size+" "+size();
     }
 }

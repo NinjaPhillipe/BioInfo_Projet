@@ -50,8 +50,8 @@ public class Frag extends BitsData
     {
         Frag[] res = new Frag[2];
         res[0] = new Frag(chars);
-        Utils.compl_inverse(chars);
-        res[1] = new Frag(chars,idCount);
+        char[] invert = Utils.compl_inverse(chars);
+        res[1] = new Frag(invert,idCount);
         return res;
     }
 

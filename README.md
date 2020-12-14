@@ -50,5 +50,8 @@ AJOUTER PENALITE DES GAPS
 OVERLAP PAS SUR QUE MARCHE BIEN DANS LES DEUX SENS
 
 
+CREER FRAGMENT A LA LECTURE
+
+
 https://search.maven.org/artifact/org.hamcrest/hamcrest-core/1.3/jar
 https://search.maven.org/search?q=g:junit%20AND%20a:junit

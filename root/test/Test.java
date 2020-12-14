@@ -10,12 +10,12 @@ public class Test extends TestCase
 {
     public void test_compl_inv()
     {
-        char[] testChar     = "ACGTTTGACAC".toCharArray();
-        char[] targetChar   = "GTGTCAAACGT".toCharArray();
+        char[] testChar     = "ACGTTTGACAC".toLowerCase().toCharArray();
+        char[] targetChar   = "GTGTCAAACGT".toLowerCase().toCharArray();
 
-        Utils.compl_inverse(targetChar);
+        Utils.compl_inverse(testChar);
 
-        System.out.println("test char : "+Arrays.toString(targetChar));
+        System.out.println("test char : "+Arrays.toString(testChar));
 
 
         assertEquals(testChar.length,targetChar.length);

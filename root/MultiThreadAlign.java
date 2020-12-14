@@ -9,7 +9,6 @@ public class MultiThreadAlign implements Runnable
 {
     private int id,start,end;
     private Thread thread;
-    private boolean finish = false;
     private ArrayList<Arc> arcs; 
     private Frag[][] node_data;
 
@@ -52,7 +51,8 @@ public class MultiThreadAlign implements Runnable
         Simi simi = new Simi(700);
         Frag f1,f2,f1p,f2p;
         // pour chaque noeud 
-        for(int f = start; f < end ; f++ )
+        System.out.println("Thread : "+id+" s->e "+start+" -> "+end);
+        for(int f = start; f <= end ; f++ )
         {
             System.out.println("Thread "+ id +" "+f+"/"+end);
             // pour chaque autre noeud
@@ -87,7 +87,6 @@ public class MultiThreadAlign implements Runnable
                 }
             }
         }
-        this.finish = true;
         thread.stop();
     }
 

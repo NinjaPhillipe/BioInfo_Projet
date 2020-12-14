@@ -9,6 +9,11 @@ import root.dataStuct.Frag;
 
 public class Utils 
 {
+    /**
+     * Lire le fichier fasta passer en paramettre
+     * @param path Le chemin du fichier
+     * @return Une ArrayList des frqagments trouver
+     */
     public static ArrayList<String> readFile(String path)
     {
         try 
@@ -19,9 +24,12 @@ public class Utils
 
             String tmp = new String();
             ArrayList<String> res = new ArrayList<>();
+
             while (myReader.hasNextLine()) 
             {
                 String data = myReader.nextLine();
+
+                /* Si c'est un nouveau fragment */
                 if(data.charAt(0) == '>')
                 {
                     if(tmp.length() > 0)
@@ -35,6 +43,9 @@ public class Utils
                     tmp += data;
                 }
             }
+            /* C'est la fin du fichier */
+            res.add(tmp);
+
             myReader.close();
             return res;
 
@@ -61,14 +72,11 @@ public class Utils
 
      /**
      * Transforme la chaine en son complementaire inverse
-     * @param chars
-     * @return
+     * @param chars Chaine dont on veut le complementaire inverse
      */
     public static void compl_inverse(char[] chars)
     {
-        // System.out.println(chars);
-
-        // compl
+        /* COMPLEMENTE LA CHAINE */
         for(int i = 0 ; i < chars.length;i++)
         {
             switch (chars[i]) 
@@ -90,17 +98,14 @@ public class Utils
                     break;
             }
         }
-        // System.out.println(chars);
         
-        //inverse
+        /* INVERSE LA CHAINE */
         for(int i = 0 ; i < chars.length/2 ; i++)
         {
             char tmp = chars[i];
             chars[i] = chars[chars.length-1-i];
             chars[chars.length-1-i] = tmp;
         }
-
-        // System.out.println(chars);
     }
 
 

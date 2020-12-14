@@ -2,14 +2,12 @@ package root.dataStuct;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 
 import root.LListCons;
 import root.MultiThreadAlign;
 import root.Simi;
-import root.dataStuct.Arc;
 
 public class Graph 
 {
@@ -40,17 +38,18 @@ public class Graph
         int prob_size = node_data.length;
 
         int start = 0;
-        int end = prob_size/cores;
+        int end = (prob_size/cores)-1;
+
+        System.out.println("FragSize : "+node_data.length);
 
         for(int i = 0 ; i < cores ; i++)
         {
-
             threads[i] = new MultiThreadAlign(i,start,end,node_data);
-            start = end;
+            start = end+1;
             if(i == cores-2)
-                end = prob_size;
+                end = prob_size-1;
             else 
-                end   = end+(prob_size/cores); 
+                end  = end+(prob_size/cores); 
             threads[i].start();
         }
 

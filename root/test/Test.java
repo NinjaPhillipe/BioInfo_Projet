@@ -10,6 +10,13 @@ import root.Simi;
 
 public class Test extends TestCase
 {
+    public void test_max()
+    {
+        assertEquals(Simi.max(1, 2, 3),3);
+        assertEquals(Simi.max(1, 4, 3),4);
+        assertEquals(Simi.max(7, 2, 3),7);
+    }
+
     public void test_compl_inv()
     {
         char[] testChar     = "ACGTTTGACAC".toLowerCase().toCharArray();

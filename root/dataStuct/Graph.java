@@ -7,6 +7,7 @@ import java.util.Collections;
 
 import root.LListCons;
 import root.MultiThreadAlign;
+import root.Simi;
 
 public class Graph 
 {
@@ -31,82 +32,79 @@ public class Graph
     private void computeArc()
     {
         /* SETUP CORES */
-        int cores = Runtime.getRuntime().availableProcessors();
-        MultiThreadAlign threads[] = new MultiThreadAlign[cores];
+        // int cores = Runtime.getRuntime().availableProcessors();
+        // MultiThreadAlign threads[] = new MultiThreadAlign[cores];
 
-        int prob_size = node_data.length;
+        // int prob_size = node_data.length;
 
-        int start = 0;
-        int end = (prob_size/cores)-1;
+        // int start = 0;
+        // int end = (prob_size/cores)-1;
 
-        System.out.println("FragSize : "+node_data.length);
+        // System.out.println("FragSize : "+node_data.length);
 
-        for(int i = 0 ; i < cores ; i++)
-        {
-            threads[i] = new MultiThreadAlign(i,start,end,node_data);
-            start = end+1;
-            if(i == cores-2)
-                end = prob_size-1;
-            else 
-                end  = end+(prob_size/cores); 
-            threads[i].start();
-        }
-
-        for(MultiThreadAlign t : threads)
-        {
-            t.join();
-        }
-        for(MultiThreadAlign t : threads)
-        {
-            arcs.addAll(t.getArcs());
-        }
-        
-
-
-        
-
-
-        // // pour allouer une seule fois la memoire
-        // Simi simi = new Simi(700);
-        // Frag f1,f2,f1p,f2p;
-        // // pour chaque noeud 
-        // for(int f = 0; f < node_data.length ; f++ )
+        // for(int i = 0 ; i < cores ; i++)
         // {
-        //     System.out.println(f+"/"+node_data.length);
-        //     // pour chaque autre noeud
-        //     for(int g = 0; g < node_data.length ; g++ )
-        //     {
-        //         if(f != g)
-        //         {
-        //             f1 = node_data[f][0];
-        //             f2 = node_data[g][0];
-        //             f1p = node_data[f][1];
-        //             f2p = node_data[g][1];
-        //             /* generer les 4 matrices */
-        //             /* genere le cas f g */
-        //             simi.loadSimiGLo(f1,f2); /* LE POIDS C EST VRAIMENT DU CACA MVA MANGER TES MORTS */
-        //             arcs.add(new Arc(f,false,g,false,new Overlap(simi, false,f1,f2)));
-        //             arcs.add(new Arc(f,false,g,false,new Overlap(simi, true,f1,f2)));
-
-        //             /* genere le cas fp g */
-        //             simi.loadSimiGLo(f1p, f2);
-        //             arcs.add(new Arc(f,true,g,false,new Overlap(simi, false,f1p,f2)));
-        //             arcs.add(new Arc(f,true,g,false,new Overlap(simi, true,f1p,f2)));
-
-        //             /* genere le cas f gp */
-        //             simi.loadSimiGLo(f1, f2p);
-        //             arcs.add(new Arc(f,false,g,true,new Overlap(simi, false,f1,f2p)));
-        //             arcs.add(new Arc(f,false,g,true,new Overlap(simi, true,f1,f2p)));
-
-        //             /* genere le cas fp gp */
-        //             simi.loadSimiGLo(f1p,f2p);
-        //             arcs.add(new Arc(f,true,g,true,new Overlap(simi, false,f1p,f2p)));
-        //             arcs.add(new Arc(f,true,g,true,new Overlap(simi, true,f1p,f2p)));
-        //         }
-        //     }
+        //     threads[i] = new MultiThreadAlign(i,start,end,node_data);
+        //     start = end+1;
+        //     if(i == cores-2)
+        //         end = prob_size-1;
+        //     else 
+        //         end  = end+(prob_size/cores); 
+        //     threads[i].start();
         // }
 
-        System.out.println(arcs.size());
+        // for(MultiThreadAlign t : threads)
+        // {
+        //     t.join();
+        // }
+        // for(MultiThreadAlign t : threads)
+        // {
+        //     arcs.addAll(t.getArcs());
+        // }
+        
+
+
+        
+
+
+        // pour allouer une seule fois la memoire
+        Simi simi = new Simi(700);
+        Frag f1,g1,fp,gp;
+        // pour chaque noeud 
+        for(int f = 0; f < node_data.length ; f++ )
+        {
+            System.out.println(f+"/"+node_data.length);
+            // pour chaque autre noeud
+            for(int g = f+1; g < node_data.length ; g++ )
+            {
+                f1 = node_data[f][0];
+                g1 = node_data[g][0];
+                fp = node_data[f][1];
+                gp = node_data[g][1];
+                /* generer les 4 matrices */
+                /* genere le cas f g */
+                simi.loadSimiGLo(f1,g1); /* LE POIDS C EST VRAIMENT DU CACA MVA MANGER TES MORTS */
+                arcs.add(new Arc(f,false,g,false,simi.get_normal(),new Overlap(simi,false,f1,g1))); /*f->g*/ 
+                arcs.add(new Arc(g,false,f,false,simi.get_invert(),new Overlap(simi,true,f1,g1)));  /*g->f*/
+
+                /* genere le cas f gp */
+                simi.loadSimiGLo(f1, gp);
+                arcs.add(new Arc(f,false,g,true,simi.get_normal(),new Overlap(simi,false,f1,gp)));  /*f->gp*/ 
+                arcs.add(new Arc(g,false,f,true,simi.get_invert(),new Overlap(simi,true,f1,gp)));   /*gp->f*/
+
+                /* genere le cas fp g */
+                simi.loadSimiGLo(fp, g1);
+                arcs.add(new Arc(f,true,g,false,simi.get_normal(),new Overlap(simi,false,fp,g1)));  /*fp->g*/ 
+                arcs.add(new Arc(g,true,f,false,simi.get_invert(),new Overlap(simi,true,fp,g1)));   /*g->fp*/
+
+                /* genere le cas fp gp */
+                simi.loadSimiGLo(fp,gp);
+                arcs.add(new Arc(f,true,g,true,simi.get_normal(),new Overlap(simi,false,fp,gp)));   /*fp->gp*/ 
+                arcs.add(new Arc(g,true,f,true,simi.get_invert(),new Overlap(simi,true,fp,gp)));    /*gp->fp*/
+            }
+        }
+
+        System.out.println("NUMBER ARC : "+arcs.size());
     }
     
     /**

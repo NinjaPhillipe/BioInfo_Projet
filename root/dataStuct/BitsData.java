@@ -1,5 +1,9 @@
 package root.dataStuct;
 
+/**
+ *  Structure qui premet de representer des variable plus petite que l'octet
+ *  Ici partage l'octet en champ de 2 bits
+ */
 public class BitsData 
 {
     protected byte[] data;

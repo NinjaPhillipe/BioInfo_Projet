@@ -1,10 +1,23 @@
 package root.dataStuct;
 
+/**
+ * Representation d'un arc du graphe
+ */
 public class Arc implements Comparable<Arc>
 {
-    public int src,dest,weight;
-    public boolean src_ci,dst_ci; /* boolean si c est un complementaire inverser */
-    public Overlap overlap;
+    public int src,dest,weight;     /* id de l'arc source et destination plus son poids */
+    public boolean src_ci,dst_ci;   /* boolean si c est un complementaire inverser */
+    public Overlap overlap;         /* Representation du chevauchement entre deux fragments */
+
+    /**
+     * Constructeur de l'arc 
+     * @param src       id du noeud source 
+     * @param src_ci    boolean qui indique si le noeud est un noeud source est complementaire inverser
+     * @param dest      id du noeud destination
+     * @param dst_ci    boolean qui indique si le noeud est un noeud destination est complementaire inverser
+     * @param weight    poid de l'arc
+     * @param overlap   chevauchement entre le fragment source et destination
+     */
     public Arc(int src,boolean src_ci,int dest,boolean dst_ci,int weight,Overlap overlap)
     {
         this.src     = src;

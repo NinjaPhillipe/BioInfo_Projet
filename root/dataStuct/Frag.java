@@ -2,16 +2,37 @@ package root.dataStuct;
 
 import root.Utils;
 
+/**
+ *  Structure qui permet de representer un fragment en memoire
+ */
 public class Frag extends BitsData
 {
+    /* declaration des convention pour ACGT */
     public static final byte A = (byte) 0b00;
     public static final byte C = (byte) 0b01;
     public static final byte G = (byte) 0b10;
     public static final byte T = (byte) 0b11;
+    
+    private static int idCount = 0; /* idnetifiant compteur */
+    private int id = 0;             /* identifiant */
 
-    private static int idCount = 0;
-    private int id = 0;
-
+    /**
+     * Constructeur qui initialise le fragment a partir d'une chaine de caractere
+     * @param chars Liste de caractere representant le fragment
+     */
+    public Frag(char[] chars)
+    {   
+        this(chars,idCount);
+        idCount++;
+    }
+    /**
+     * Constructeur prive qui permet de forcer l'id a un id different du compteur
+     * 
+     * Utiliser pour pouvoir mettre le meme identifiant au fragment et son complementaire inverser
+     * 
+     * @param chars Liste de caractere representant le fragment
+     * @param id    Identifiant du fragment
+     */
     private Frag(char[] chars,int id)
     {
         this.size = chars.length;
@@ -40,12 +61,14 @@ public class Frag extends BitsData
             }
         }
     }
-    public Frag(char[] chars)
-    {   
-        this(chars,idCount);
-        idCount++;
-    }
 
+
+    /**
+     * Methode qui initialise le fragment et son complementaire inverser a partir
+     * d'une liste de caractere.
+     * @param chars liste de caractere
+     * @return  Une liste de taille 2 contenant le fragment et son complementaire.
+     */
     public static Frag[] init_f_and_fprime(char[] chars)
     {
         Frag[] res = new Frag[2];

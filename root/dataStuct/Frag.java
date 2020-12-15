@@ -1,7 +1,5 @@
 package root.dataStuct;
 
-import root.Utils;
-
 /**
  *  Structure qui permet de representer un fragment en memoire
  */

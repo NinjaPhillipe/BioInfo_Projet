@@ -29,11 +29,6 @@ public class MultiThreadAlign implements Runnable
             thread.start();
         }
     }
-
-    public void stop()
-    {
-        thread.stop();
-    }
     public void join()
     {
         try
@@ -84,7 +79,6 @@ public class MultiThreadAlign implements Runnable
                 arcs.add(new Arc(g,true,f,true,simi.get_invert(),new Overlap(simi,true)));    /*gp->fp*/
             }
         }
-        thread.stop();
     }
 
     public ArrayList<Arc> getArcs() 

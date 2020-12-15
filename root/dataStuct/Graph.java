@@ -7,7 +7,6 @@ import java.util.Collections;
 
 import root.LListCons;
 import root.MultiThreadAlign;
-import root.Simi;
 
 public class Graph 
 {
@@ -53,6 +52,7 @@ public class Graph
             threads[i].start();
         }
 
+        /* attendre la fin des threads */
         for(MultiThreadAlign t : threads)
         {
             t.join();

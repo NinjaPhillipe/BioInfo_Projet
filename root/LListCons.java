@@ -249,9 +249,8 @@ public class LListCons
                             }
                             break;
                     }
-                 
                     tmp = tmp.next;
-                }
+                }else System.out.println("ERROR tmp NULL ");
             }
         }
 

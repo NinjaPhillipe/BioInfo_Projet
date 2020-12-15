@@ -123,7 +123,8 @@ public class Graph
         }
         // ON DOIT PAS ARRIVER LA SINON C EST DE LA MERDE
         // throw exception
-        System.out.println("C EST DE LA MERDE");
+        System.out.println("AUCUN SET TROUVER");
+        System.exit(1);
         return 0;
     } 
 
@@ -137,30 +138,22 @@ public class Graph
     }
     private ArrayList<Arc> get_hamiltonian()
     {
+        ArrayList<Arc> res = new ArrayList<>();
+        /* tri arc par ordre decroissant */
+        Collections.sort(this.arcs,Collections.reverseOrder());
         int in[]  = new int[n_node];
         int out[] = new int[n_node];
 
-        // SET
+        /* SET */
         ArrayList<ArrayList<Integer>> make_set = new ArrayList<>(n_node); 
         for(int i = 0 ; i < n_node ; i++ )
         {
             in[i]=0;
             out[i]=0;
-            // MAKESET
+            /* MAKESET */
             make_set.add(new ArrayList<Integer>());
             make_set.get(i).add(i);
         }
-        
-
-        // tri arc
-        Collections.sort(this.arcs,Collections.reverseOrder());
-
-        ArrayList<Arc> res = new ArrayList<>();
-        
-        // premier noeud passe entree interdite car sinon cycle
-        // in[this.arcs.get(0).src] = 1;
-
-        /* AMELIORATION ON PEUT BRISER LE PLUS PETIT ARC DU CYCLE */
 
         // System.out.println("nbr arc "+ arcs.size());
         for(Arc arc: this.arcs)
@@ -171,8 +164,6 @@ public class Graph
             if(in[arc.dest]==0 && out[arc.src]==0 && set_src!=set_dst )
             {
                 // SELECT(f,g)
-
-                // if()
                 res.add(arc);
 
                 in[arc.dest] = 1;
@@ -187,6 +178,7 @@ public class Graph
                 /* prends le premier arc du chemin hamiltonien */
                 for(int i = 0 ; i < in.length ; i++)
                 {
+                    /* premier arc est celui dont aucun ne rentre dedans */
                     if(in[i] == 0)
                     {
                         /* sort hamiltonian */
@@ -232,8 +224,6 @@ public class Graph
             chemin.remove(start);
         }
 
-        // sorted.add(chemin.get(0)); /* PAS BON ON NE SAIT PAS SI LE PREMIER EST LE DEBUT DU CHEMIN HAMILTONIAN */
-        // int current = chemin.remove(0).dest;
         int current = start.dest;
         while(!chemin.isEmpty())
         {
@@ -241,15 +231,13 @@ public class Graph
             int next = 0;
             for(Arc a:chemin)
             {
-                // si on a trouver l'arc
+                /* si on a trouver l'arc */
                 if(a.src == current)
                     break;
                 next++;
             }
 
-            sorted.add(chemin.get(next));
-
-
+            sorted.add(chemin.get(next)); /* ajoute l'arc suivant */
             current = chemin.remove(next).dest;
         }
 
@@ -262,9 +250,7 @@ public class Graph
 
         ArrayList<Arc> chemin =  this.get_hamiltonian();
 
-        // ArrayList<Arc> res = sortHamiltonian(chemin);
-
-        //print arc 
+        /* print arc */
         for (Arc arc : chemin )
         {
             System.out.println(arc);
@@ -284,29 +270,6 @@ public class Graph
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
-
-        ////// NEED REWORK
-
-        // utiliser OVERLAP AFIN DE DETERMINER le vote de consensus
-
-
-        // LListCons consensus = new LListCons(node_data.get(res.get(0).src));
-        // // System.out.println("first  : "+node_data.get(res.get(0).src));
-        // // System.out.println("second : "+node_data.get(res.get(0).dest));
-        // System.out.println("con s "+consensus.getSize());
-
-        // String chaine = "";
-
-        // for (Arc arc : res )
-        // {
-        //     // System.out.println("\nSRC: "+arc.src+"  W: "+arc.weight+"  DST: "+arc.dest);
-        //     System.out.println("\nSRC: "+node_data.get(arc.src).length()+"  W: "+arc.weight+"  DST: "+node_data.get(arc.dest).length());
-        //     chaine+=consensus.add(node_data.get(arc.dest),arc.weight);
-        // }
-
-        // System.out.println("\n"+chaine.length());
-
-
         return null;
     }
 }

@@ -69,47 +69,6 @@ public class Utils
        return frags;
     }
 
-
-     /**
-     * Transforme la chaine en son complementaire inverse
-     * @param chars Chaine dont on veut le complementaire inverse
-     */
-    public static char[] compl_inverse(char[] chars)
-    {
-        char [] res = new char[chars.length];
-        /* COMPLEMENTE LA CHAINE */
-        for(int i = 0 ; i < chars.length;i++)
-        {
-            switch (chars[i]) 
-            {
-                case 'a':
-                    res[i] = 't';
-                    break;
-                case 't':
-                    res[i] = 'a';
-                    break;
-                case 'g':
-                    res[i] = 'c';
-                    break;
-                case 'c':
-                    res[i] = 'g';
-                    break;
-                default:
-                    System.out.println("UNKNOW ");
-                    break;
-            }
-        }
-        
-        /* INVERSE LA CHAINE */
-        for(int i = 0 ; i < res.length/2 ; i++)
-        {
-            char tmp = res[i];
-            res[i] = res[res.length-1-i];
-            res[res.length-1-i] = tmp;
-        }
-        return res;
-    }
-
     public static int max(int a, int b)
     {
         return (a > b) ? a : b;

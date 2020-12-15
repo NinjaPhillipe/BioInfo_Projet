@@ -62,6 +62,53 @@ public class Frag extends BitsData
         }
     }
 
+    /**
+     * Cree le complementaire inverser d'un fragment
+     */
+    private Frag(Frag f)
+    {
+        this.size = f.size;
+        this.alloc_data();
+
+        /* COMPL_INVERSE */
+        for(int i = 0 ; i < f.size/2 ; i++)
+        {
+            this.set(i,compl(f.get(f.size-1-i)));
+            this.set(this.size-1-i,compl(f.get(i)));
+        }
+
+        /* Si est impair*/
+        if(f.size%2 > 0)
+        {
+            /* ajouter le complementaire inverser du milieu */
+            int i = (f.size/2);
+            this.set(i,compl(f.get(i)));
+        }
+
+    }
+
+    /**
+     * Retourne le complementaire inverser d'un octet
+     * @param b l'octet a complementer inverser 
+     * @return  l'octet complementer inverser 
+     */
+    private byte compl(byte b)
+    {
+        switch(b)
+        {
+            case A:
+                return T;
+            case C:
+                return G;
+            case G:
+                return C;
+            case T:
+                return A;
+        }
+        System.out.println("Impossible un byte n'est pas de la convention acgt");
+        System.exit(1);
+        return 0;
+    }
 
     /**
      * Methode qui initialise le fragment et son complementaire inverser a partir
@@ -73,8 +120,7 @@ public class Frag extends BitsData
     {
         Frag[] res = new Frag[2];
         res[0] = new Frag(chars);
-        char[] invert = Utils.compl_inverse(chars);
-        res[1] = new Frag(invert,idCount);
+        res[1] = new Frag(res[0]);
         return res;
     }
 
@@ -101,16 +147,16 @@ public class Frag extends BitsData
             switch (this.get(i)) 
             {
                 case A:
-                    res+= 'A';
+                    res+= 'a';
                     break;
                 case C:
-                    res+= 'C';
+                    res+= 'c';
                     break;
                 case G:
-                    res+= 'G';
+                    res+= 'g';
                     break;
                 case T:
-                    res+= 'T';
+                    res+= 't';
                     break;
                 default:
                     System.out.println("ERROR "+this.get(i));

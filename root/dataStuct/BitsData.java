@@ -1,16 +1,17 @@
 package root.dataStuct;
 
 /**
- *  Structure qui premet de representer des variable plus petite que l'octet
+ *  Structure qui premet de representer des variables plus petite que l'octet
  *  Ici partage l'octet en champ de 2 bits
  */
 public class BitsData 
 {
     protected byte[] data;
     protected int size;
-    // size of field in bits 
+
+    /* taille en bits d'un champ */
     protected static final int bitsL = 2;
-    // number of slot in one byte
+    /* nombre de champ par octet */
     protected static final int nslot = 8/bitsL;
 
     /**
@@ -49,10 +50,6 @@ public class BitsData
     {
         return (byte) ( (this.data[i/nslot] >> (i%nslot)*bitsL ) & 0b11 );
     }
-
-
-    public int size()
-    {
-        return this.size;
-    }
+    
+    public int size() { return this.size; }
 }

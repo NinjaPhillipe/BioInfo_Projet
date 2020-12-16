@@ -1,11 +1,9 @@
 package root.dataStuct;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import root.LListCons;
+import root.HamiltonianPath;
 import root.MultiThreadAlign;
 
 public class Graph 
@@ -18,7 +16,7 @@ public class Graph
     {
         this.node_data = frags;
         n_node = frags.length;
-        arcs = new ArrayList<>();
+        arcs = new ArrayList<>(frags.length*(frags.length-1)*2);
 
         computeArc();/* calcul tout les arcs*/
     }
@@ -135,9 +133,11 @@ public class Graph
         }
         return a;
     }
-    public ArrayList<Arc> get_hamiltonian()
+    public HamiltonianPath get_hamiltonian()
     {
-        ArrayList<Arc> res = new ArrayList<>();
+        /* Initialise une liste de taille n (le nombre de fragments)*/
+        HamiltonianPath path = new HamiltonianPath(node_data.length);
+
         /* tri arc par ordre decroissant */
         Collections.sort(this.arcs,Collections.reverseOrder());
         int in[]  = new int[n_node];
@@ -162,8 +162,8 @@ public class Graph
             int set_dst = findSet(make_set, arc.dest);
             if(in[arc.dest]==0 && out[arc.src]==0 && set_src!=set_dst )
             {
-                // SELECT(f,g)
-                res.add(arc);
+                /* SELECT(f,g)*/
+                path.set(arc);/* On ajoute l'arc au chemin */
 
                 in[arc.dest] = 1;
                 out[arc.src] = 1;
@@ -180,66 +180,16 @@ public class Graph
                     /* premier arc est celui dont aucun ne rentre dedans */
                     if(in[i] == 0)
                     {
-                        /* sort hamiltonian */
-                        return sortHamiltonian(res, i);
+                        path.set_start(i);/* fixe le noeud du initial du chemin hamiltonien */
+                        return path;
                     }
                 }
-                System.out.println("PAS DE DEBUT AU CHEMIN HAMILTONIEN");
-                
+                System.out.println("PAS DE DEBUT AU CHEMIN HAMILTONIEN POSSIBLE");
+                System.exit(1);
             }
         }
-        // ERROR
+        /* ERROR */
         System.out.println("Can't get hamiltonian path");
         return null;
-    }
-
-    /**
-     * 
-     * @param chemin
-     * @param i id de la source du premier arc du chemin hamiltonien
-     * @return
-     */
-    private ArrayList<Arc> sortHamiltonian(ArrayList<Arc> chemin,int i)
-    {
-        ArrayList<Arc> sorted = new ArrayList<>(chemin.size());
-
-        /* cherche le premier arc du chemin */
-        Arc start = null;
-        for(Arc arc : chemin)
-        {
-            if(arc.src == i)
-            {
-                System.out.println("SRC HAMILT : "+arc);
-                start = arc;
-            }
-        }
-        if(start == null)
-        {
-            System.out.println("PAS DE DEBUT DE CHEMIN HAMILTONIEN TROUVER");
-            System.exit(1);
-        }else
-        {
-            sorted.add(start);
-            chemin.remove(start);
-        }
-
-        int current = start.dest;
-        while(!chemin.isEmpty())
-        {
-            // System.out.println(""+current);
-            int next = 0;
-            for(Arc a:chemin)
-            {
-                /* si on a trouver l'arc */
-                if(a.src == current)
-                    break;
-                next++;
-            }
-
-            sorted.add(chemin.get(next)); /* ajoute l'arc suivant */
-            current = chemin.remove(next).dest;
-        }
-
-        return sorted;
     }
 }

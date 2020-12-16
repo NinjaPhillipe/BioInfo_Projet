@@ -1,7 +1,5 @@
 package root;
 
-import java.util.ArrayList;
-
 import root.dataStuct.Frag;
 import root.dataStuct.Overlap;
 import root.dataStuct.Arc;
@@ -16,7 +14,7 @@ public class LListCons
 
     private class Node 
     {
-        // ON SUPPOSE QUE LE TABLEAU PREND LA FORME A C G T
+        /* ON SUPPOSE QUE LE TABLEAU PREND LA FORME ACGT */
         public int [] acgt= {0,0,0,0};
         
         public Node next;
@@ -55,10 +53,6 @@ public class LListCons
                     break;
             }
         }
-        public boolean hasNext()
-        {
-            return this.next != null;
-        }
     }
 
     /**
@@ -66,18 +60,22 @@ public class LListCons
      * @param frags matrice ou sont stocker tout les fragments
      * @param arcs chemin hamiltonian triee selon l'ordre des arcs
      */
-    public LListCons(Frag[][] frags,ArrayList<Arc> arcs)
+    public LListCons(Frag[][] frags,HamiltonianPath path)
     {
-        // prend le premier fragments inverser ou non
-        Frag firstFrag = arcs.get(0).src_ci ? frags[arcs.get(0).src][1] : frags[arcs.get(0).src][0];
+        /* prend le premier fragments inverser ou non */
+        Arc arc = path.get_next();
+        Frag firstFrag = arc.src_ci ? frags[arc.src][1] : frags[arc.src][0];
 
-        // ajoute le fragment a la liste chainnee
+        /* ajoute le fragment a la liste chainne */
         for (int i = 0 ; i < firstFrag.size() ; i++)
             this.add_to_end(firstFrag.get(i));
 
-        // ajoute les autres fragments
-        for(Arc a : arcs)
-            this.add_frag(get_frag_dst(frags,a),a.overlap);
+        /* ajoute les autres fragments */
+        while(arc != null)
+        {
+            this.add_frag(get_frag_dst(frags,arc),arc.overlap);
+            arc = path.get_next();
+        }
     }
 
     /**

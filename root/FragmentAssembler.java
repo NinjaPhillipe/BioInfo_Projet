@@ -3,23 +3,22 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import root.dataStuct.Arc;
 import root.dataStuct.Frag;
 import root.dataStuct.Graph;
 
-public class MainBioInfo
+public class FragmentAssembler
 {
     public static void main(String[] args)
     {
         // TEST ALL
-        ArrayList<String> frags_str = Utils.readFile("../output/collection1.fasta");
+        ArrayList<String> frags_str = Utils.readFile("../output/collection1S.fasta");
         System.out.println("SIZE AFTER LOAD : "+frags_str.size());
         Frag[][] frags = Utils.do_all_frag(frags_str);
         Graph g = new Graph(frags);
 
-        ArrayList<Arc> chemin = g.get_hamiltonian();
+        HamiltonianPath path = g.get_hamiltonian();
 
-        LListCons consensus = new LListCons(frags, chemin);
+        LListCons consensus = new LListCons(frags, path);
 
         try {
             FileWriter myWriter = new FileWriter("../output/output.fasta");

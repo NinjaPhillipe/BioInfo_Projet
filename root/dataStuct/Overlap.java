@@ -53,7 +53,6 @@ public class Overlap extends BitsData
                 }
             }
         }
-        
         /* 
         Iteration afin de determiner la taille de structure de donnees 
         afin d'eviter de devoir allouer plusieurs fois la memoire
@@ -76,12 +75,10 @@ public class Overlap extends BitsData
                 gauche = simi.getData(y_cur,x_cur-1);
             else 
                 gauche = simi.getData(y_cur-1,x_cur);
-            
-
             diag =  simi.getData(y_cur-1,x_cur-1);
             int maxTmp = Utils.max(haut, gauche, diag);
             
-            if (diag >= gauche && diag >= haut)
+            if (diag == maxTmp)
             { // diag
                 x_cur-=1;
                 y_cur-=1;
@@ -130,7 +127,6 @@ public class Overlap extends BitsData
                 gauche = simi.getData(y_cur,x_cur-1);
             else 
                 gauche = simi.getData(y_cur-1,x_cur);
-                
             diag =  simi.getData(y_cur-1,x_cur-1);
             int maxTmp = Utils.max(haut,gauche, diag);
             

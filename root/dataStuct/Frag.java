@@ -50,28 +50,19 @@ public class Frag extends BitsData
 
     /**
      * Cree le complementaire inverser d'un fragment
+     * @param f Fragment dont on cree le complementaire inverser
      */
     private Frag(Frag f)
     {
-
         this.size = f.size;
         this.alloc_data();
 
-        /* COMPL_INVERSE */
-        for(int i = 0 ; i < f.size/2 ; i++)
-        {
+        /* COMPL_INVERSE 
+            Parcours de le fragment source dans le sens inverse du fragment 
+            destination et complemente la valeur recue
+        */
+        for(int i = 0 ; i < f.size ; i++)
             this.set(i,compl(f.get(f.size-1-i)));
-            this.set(this.size-1-i,compl(f.get(i)));
-        }
-
-        /* Si est impair*/
-        if(f.size%2 > 0)
-        {
-            /* ajouter le complementaire inverser du milieu */
-            int i = (f.size/2);
-            this.set(i,compl(f.get(i)));
-        }
-
     }
 
     /**

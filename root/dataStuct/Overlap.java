@@ -16,15 +16,20 @@ public class Overlap extends BitsData
     private int frag1_overlap_size = 0;
     private int frag2_overlap_size = 0;
 
+    private boolean invert;
+
     public Overlap(Simi simi,boolean invert)
     {
+        this.invert = invert;
+
         /* place les curseurs dans la matrice */
         int max,y_cur,x_cur;
         if(!invert) /* f->g derniere ligne */
         {
             y_cur = simi.getEnd_i()-1;
-            max = simi.getData(y_cur,0);
             x_cur = 0;
+            max = simi.getData(y_cur,x_cur);
+            
             for(int j = 1 ; j < simi.getEnd_j() ; j++ )
             {
                 if (simi.getData(y_cur,j) > max )
@@ -63,12 +68,20 @@ public class Overlap extends BitsData
         int haut,gauche,diag;
         while (y_cur>0 && x_cur>0)
         {
-            haut = simi.getData(y_cur-1,x_cur);
-            gauche = simi.getData(y_cur,x_cur-1);
+            if(!invert)
+                haut = simi.getData(y_cur-1,x_cur);
+            else
+                haut = simi.getData(y_cur,x_cur-1);
+            if(!invert)
+                gauche = simi.getData(y_cur,x_cur-1);
+            else 
+                gauche = simi.getData(y_cur-1,x_cur);
+            
+
             diag =  simi.getData(y_cur-1,x_cur-1);
             int maxTmp = Utils.max(haut, gauche, diag);
             
-            if (diag == maxTmp)
+            if (diag >= gauche && diag >= haut)
             { // diag
                 x_cur-=1;
                 y_cur-=1;
@@ -109,8 +122,15 @@ public class Overlap extends BitsData
         int haut,gauche,diag;
         while (y_cur>0 && x_cur>0)
         {
-            haut = simi.getData(y_cur-1,x_cur);
-            gauche = simi.getData(y_cur,x_cur-1);
+            if(!invert)
+                haut = simi.getData(y_cur-1,x_cur);
+            else
+                haut = simi.getData(y_cur,x_cur-1);
+            if(!invert)
+                gauche = simi.getData(y_cur,x_cur-1);
+            else 
+                gauche = simi.getData(y_cur-1,x_cur);
+                
             diag =  simi.getData(y_cur-1,x_cur-1);
             int maxTmp = Utils.max(haut,gauche, diag);
             

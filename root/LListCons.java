@@ -63,7 +63,7 @@ public class LListCons
 
     /**
      * 
-     * @param frags 
+     * @param frags matrice ou sont stocker tout les fragments
      * @param arcs chemin hamiltonian triee selon l'ordre des arcs
      */
     public LListCons(Frag[][] frags,ArrayList<Arc> arcs)
@@ -178,7 +178,7 @@ public class LListCons
 
         /* pretraite la partie des octets avant l'overlap */
         {
-            String acgt = "ACGT";
+            String acgt = "acgt";
             for(int pretrait = this.size - overlap.get_frag1_overlap_size(); pretrait > 0;pretrait--)
             {
                 /* cherche la lettre la plus frequente */
@@ -199,13 +199,9 @@ public class LListCons
             }
         }
         
-       
-        if(overlap.size() > size ) System.out.println("ERROR OVERLAP EST PLUS GRAND "+overlap.size()+ " > "+size ); /* BIDOUILLERIE */
-
         /* partie overlap */
         // marche pas besoin d ajouter un mecanisme de propagation des gap entre les paires de comparaison 
         {
-            
             Node tmp = this.head;
 
             /* Indice des fragments au debut de l'overlap */
@@ -214,42 +210,39 @@ public class LListCons
             /* Pour chaque element de l'overlap */
             for(int i = 0 ; i < overlap.size() ; i++)
             {   
-                if(tmp!= null/* ERREUR TMP DOIT ETRE VALIDE */)  /* BIDOUILLERIE */
+                switch (overlap.get(i))
                 {
-                    switch (overlap.get(i))
-                    {
-                        case Overlap.B:/* cas superposition */
-                            if(!tmp.gapG2 )/* si le gap est dans le mots qu on veut ajouter. */
-                            {
-                                tmp.add_data(frag.get(frag2_id));
+                    case Overlap.B:/* cas superposition */
+                        if(!tmp.gapG2 )/* si le gap est dans le mots qu on veut ajouter. */
+                        {
+                            tmp.add_data(frag.get(frag2_id));
 
-                                frag2_id ++; /* on passe un element de frag2 */
-                            }
-                            break;
-                        case Overlap.G1: /* gap dans le premier mot */
-                            if(!tmp.gapG2 )/* si le gap est dans le mots qu on veut ajouter. */
-                            {
-                                /* on ajoute un noeud avec la donnee */
-                                insert(new Node(frag.get(frag2_id)), i); /* QUESTION ? : l'insertion doit se faire juste avant le noeud actuel */
-                                /* On ajoute avant le noeud courant donc pas de passage au suivant */
-                                frag2_id ++; /* on passe un element de frag2 */
-                            }else
-                            { /* cas ou gap plus gap  pour pas doublon*/ 
-                                tmp.add_data(frag.get(frag2_id));
-                                frag2_id ++; /* on passe un element de frag2 */
-                            }
-                            break;
-                        case Overlap.G2: /* gap dans le deuxieme mot */
-                            if(!tmp.gapG2 )/* si le gap est dans le mots qu on veut ajouter. */
-                            {
-                                /* On ne doit rien rajouter */
-                                tmp.add_data(frag.get(frag2_id));
-                                tmp.gapG2 = true;
-                            }
-                            break;
-                    }
-                    tmp = tmp.next;
-                }else System.out.println("ERROR tmp NULL ");
+                            frag2_id ++; /* on passe un element de frag2 */
+                            tmp = tmp.next;
+                        }
+                        break;
+                    case Overlap.G1: /* gap dans le premier mot */
+                        if(!tmp.gapG2 )/* si le gap est dans le mots qu on veut ajouter. */
+                        {
+                            /* on ajoute un noeud avec la donnee */
+                            insert(new Node(frag.get(frag2_id)), i); /* QUESTION ? : l'insertion doit se faire juste avant le noeud actuel */
+                            /* On ajoute avant le noeud courant donc pas de passage au suivant */
+                            frag2_id ++; /* on passe un element de frag2 */
+                        }else
+                        { /* cas ou gap plus gap  pour pas doublon*/ 
+                            tmp.add_data(frag.get(frag2_id));
+                            frag2_id ++; /* on passe un element de frag2 */
+                        }
+                        break;
+                    case Overlap.G2: /* gap dans le deuxieme mot */
+                        if(!tmp.gapG2 )/* si le gap est dans le mots qu on veut ajouter. */
+                        {
+                            /* On ne doit rien rajouter */
+                            // tmp.add_data(frag.get(frag2_id));
+                        }
+                        tmp.gapG2 = true;
+                        break;
+                }
             }
         }
 

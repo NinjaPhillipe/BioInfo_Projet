@@ -20,7 +20,7 @@ public class Overlap extends BitsData
     {
         /* place les curseurs dans la matrice */
         int max,y_cur,x_cur;
-        if(invert) /* f->g derniere ligne */
+        if(!invert) /* f->g derniere ligne */
         {
             y_cur = simi.getEnd_i()-1;
             max = simi.getData(y_cur,0);
@@ -131,24 +131,6 @@ public class Overlap extends BitsData
                 this.size++;
             }
         }
-    }
-
-    public int get_value()
-    {
-        int res = 0;
-        for (int i = 0 ; i < this.size ; i++)
-        {
-            switch (this.get(i)) 
-            {
-                case B:
-                    res+= 1;
-                    break;
-                case G2:
-                    res+= 1;
-                    break;
-            }
-        }
-        return res;
     }
 
     public int get_frag1_overlap_size()

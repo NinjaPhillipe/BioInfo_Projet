@@ -20,19 +20,6 @@ public class Frag extends BitsData
      */
     public Frag(char[] chars)
     {   
-        this(chars,idCount);
-        idCount++;
-    }
-    /**
-     * Constructeur prive qui permet de forcer l'id a un id different du compteur
-     * 
-     * Utiliser pour pouvoir mettre le meme identifiant au fragment et son complementaire inverser
-     * 
-     * @param chars Liste de caractere representant le fragment
-     * @param id    Identifiant du fragment
-     */
-    private Frag(char[] chars,int id)
-    {
         this.size = chars.length;
 
         alloc_data();
@@ -58,6 +45,7 @@ public class Frag extends BitsData
                     break;
             }
         }
+        idCount++;
     }
 
     /**
@@ -65,6 +53,7 @@ public class Frag extends BitsData
      */
     private Frag(Frag f)
     {
+
         this.size = f.size;
         this.alloc_data();
 

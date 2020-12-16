@@ -53,25 +53,25 @@ public class Test extends TestCase
         // assertEquals(simi.get_normal(),3);
 
     }
-    // public void test_compl_simi2()
-    // {
-    //     char[] f = "AAAACCGTAAAA".toLowerCase().toCharArray();
-    //     char[] g = "CCGT".toLowerCase().toCharArray();
+    public void test_compl_simi2()
+    {
+        char[] f = "AAAACCGTAAAA".toLowerCase().toCharArray();
+        char[] g = "CCGT".toLowerCase().toCharArray();
 
-    //     Frag frag1 = new Frag(f);
-    //     Frag frag2 = new Frag(g);
+        Frag frag1 = new Frag(f);
+        Frag frag2 = new Frag(g);
 
-    //     Simi simi = new Simi(50);
+        Simi simi = new Simi(50);
 
-    //     simi.loadSimiGLo(frag1, frag2);
-    //     simi.printSimi();
+        simi.loadSimiGLo(frag1, frag2);
+        simi.printSimi();
 
-    //     Overlap over = new Overlap(simi, false, frag1, frag2);
-    //     System.out.println(over);
+        Overlap over = new Overlap(simi, false);
+        // System.out.println(over);
 
-    //     // assertEquals(simi.get_normal(),3);
+        // assertEquals(simi.get_normal(),3);
 
-    // }
+    }
     // public void test_compl_simi3()
     // {
     //     char[] f = "CAACGT".toLowerCase().toCharArray();
@@ -87,6 +87,25 @@ public class Test extends TestCase
 
     //     Overlap over = new Overlap(simi, false, frag1, frag2);
     //     System.out.println(over);
+
+    //     // assertEquals(simi.get_normal(),3);
+
+    // }
+    // public void test_compl_simi4()
+    // {
+    //     char[] f = "ACGCT".toLowerCase().toCharArray();
+    //     char[] g = "GTAC".toLowerCase().toCharArray();
+
+    //     Frag frag1 = new Frag(f);
+    //     Frag frag2 = new Frag(g);
+
+    //     Simi simi = new Simi(50);
+
+    //     simi.loadSimiGLo(frag1, frag2);
+    //     simi.printSimi();
+
+    //     Overlap over = new Overlap(simi,false);
+    //     System.out.println("overlap "+over+"\n end");
 
     //     // assertEquals(simi.get_normal(),3);
 

@@ -62,7 +62,7 @@ public class Simi
             {
                 data[i][j] = max(
                                 data[i][j-1]-2,                                    
-                                max(
+                                max( /* CHANGER EN UN SEUL MAX */
                                     data[i-1][j-1]+pcost(frag1.get(i-1),frag2.get(j-1)),
                                     data[i-1][j]-2
                                     )     
@@ -84,7 +84,7 @@ public class Simi
         }
     }
 
-    public int get_normal()
+    public int get_invert()
     {
         int max = data[0][end_j-1];
         for(int i = 1 ; i < end_i ; i++ )
@@ -95,7 +95,7 @@ public class Simi
         return max;
     }
 
-    public int get_invert()
+    public int get_normal()
     {
         int max = data[end_i-1][0];
         for(int i = 1 ; i < end_j ; i++ )

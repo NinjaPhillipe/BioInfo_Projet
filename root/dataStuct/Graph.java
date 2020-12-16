@@ -20,8 +20,7 @@ public class Graph
         n_node = frags.length;
         arcs = new ArrayList<>();
 
-        // calcul tout les arcs
-        computeArc();
+        computeArc();/* calcul tout les arcs*/
     }
 
     /**
@@ -126,7 +125,7 @@ public class Graph
         System.out.println("AUCUN SET TROUVER");
         System.exit(1);
         return 0;
-    } 
+    }
 
     public static int min( int a,int b)
     {
@@ -136,7 +135,7 @@ public class Graph
         }
         return a;
     }
-    private ArrayList<Arc> get_hamiltonian()
+    public ArrayList<Arc> get_hamiltonian()
     {
         ArrayList<Arc> res = new ArrayList<>();
         /* tri arc par ordre decroissant */
@@ -242,34 +241,5 @@ public class Graph
         }
 
         return sorted;
-    }
-
-    public ArrayList<String> doall()
-    {
-        System.out.println("Start Hamiltonian");
-
-        ArrayList<Arc> chemin =  this.get_hamiltonian();
-
-        /* print arc */
-        for (Arc arc : chemin )
-        {
-            System.out.println(arc);
-        }
-
-        LListCons consensus = new LListCons(this.node_data, chemin);
-        // System.out.println(consensus.resS);
-        System.out.println("Res length : "+consensus.resS.length());
-
-        try {
-            FileWriter myWriter = new FileWriter("../output/output.fasta");
-            myWriter.write("> Groupe-JSP Collection 1 Longueur "+consensus.resS.length()+"\n");
-            myWriter.write(consensus.resS);
-            myWriter.close();
-            System.out.println("Successfully wrote to the file.");
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-        return null;
     }
 }

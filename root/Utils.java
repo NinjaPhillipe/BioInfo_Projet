@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import root.dataStuct.Frag;
 
 public class Utils 
 {
@@ -56,19 +55,6 @@ public class Utils
         }
         return null;
     }
-
-
-    public static Frag[][] do_all_frag(ArrayList<String> frag_chars)
-    {
-       Frag[][] frags = new Frag[frag_chars.size()][2];
-
-       for(int i = 0 ; i < frag_chars.size() ; i++)
-       {
-           frags[i] = Frag.init_f_and_fprime(frag_chars.get(i).toCharArray());
-       }
-       return frags;
-    }
-
     public static int max(int a, int b)
     {
         return (a > b) ? a : b;

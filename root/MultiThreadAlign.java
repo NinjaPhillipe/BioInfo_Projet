@@ -5,6 +5,9 @@ import root.dataStuct.Frag;
 import root.dataStuct.Overlap;
 import root.dataStuct.Arc;
 
+/**
+ * Classe qui s'occupe de decouper le calcul des similitudes en thread
+ */
 public class MultiThreadAlign implements Runnable
 {
     private int id,start,end;
@@ -12,6 +15,13 @@ public class MultiThreadAlign implements Runnable
     private ArrayList<Arc> arcs; 
     private Frag[][] node_data;
 
+    /**
+     * Initialise le thread
+     * @param id
+     * @param start
+     * @param end
+     * @param node_data
+     */
     public MultiThreadAlign(int id,int start,int end,Frag[][] node_data)
     {
         this.start = start;
@@ -21,6 +31,9 @@ public class MultiThreadAlign implements Runnable
         this.node_data = node_data;
     }
 
+    /**
+     * Lance le thread
+     */
     public void start()
     {
         if(thread == null)
@@ -29,6 +42,9 @@ public class MultiThreadAlign implements Runnable
             thread.start();
         }
     }
+    /**
+     * Attend le thread
+     */
     public void join()
     {
         try
@@ -39,6 +55,9 @@ public class MultiThreadAlign implements Runnable
         {}
     }
 
+    /**
+     * Action que le thread effectue
+     */
     public void run()
     {
 
@@ -80,10 +99,5 @@ public class MultiThreadAlign implements Runnable
             }
         }
     }
-
-    public ArrayList<Arc> getArcs() 
-    {
-        return arcs;
-    }
-    
+    public ArrayList<Arc> getArcs() { return arcs; }
 }

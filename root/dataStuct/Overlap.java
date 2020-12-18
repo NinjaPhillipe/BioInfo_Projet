@@ -26,8 +26,8 @@ public class Overlap extends BitsData
         int max,y_cur,x_cur;
         if(!invert) /* f->g derniere ligne */
         {
-            y_cur = simi.getEnd_i()-1;
             x_cur = 0;
+            y_cur = simi.getEnd_i()-1;
             max = simi.getData(y_cur,x_cur);
             
             for(int j = 1 ; j < simi.getEnd_j() ; j++ )
@@ -78,7 +78,7 @@ public class Overlap extends BitsData
             diag =  simi.getData(y_cur-1,x_cur-1);
             int maxTmp = Utils.max(haut, gauche, diag);
             
-            if (diag == maxTmp)
+            if (diag >=0)
             { // diag
                 x_cur-=1;
                 y_cur-=1;
@@ -130,7 +130,7 @@ public class Overlap extends BitsData
             diag =  simi.getData(y_cur-1,x_cur-1);
             int maxTmp = Utils.max(haut,gauche, diag);
             
-            if (diag == maxTmp)
+            if (diag >= 0)
             { // diag
                 x_cur-=1;
                 y_cur-=1;
@@ -163,7 +163,6 @@ public class Overlap extends BitsData
         String res = "";
         for (int i = 0 ; i < this.size ; i++)
         {
-            System.out.println("i : "+i);
             switch (this.get(i)) 
             {
                 case B:
@@ -176,8 +175,7 @@ public class Overlap extends BitsData
                     res+= '2';
                     break;
                 default:
-                    System.out.println("ERROR "+this.get(i));
-                    break;
+                    throw new RuntimeException("Ne respecte pas la convention B G1 G2");
             }
         }
         return res+"\n "+frag1_overlap_size+" "+frag2_overlap_size+" "+size();

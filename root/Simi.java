@@ -4,6 +4,7 @@ import root.dataStuct.Frag;
 
 /**
  * Tableau de taille variable
+ * Permet d'initialiser une seule fois la memoire 
  */
 public class Simi 
 {
@@ -60,16 +61,13 @@ public class Simi
         {
             for (int j = 1 ; j < end_j ; j++)
             {
-                data[i][j] = max(
+                data[i][j] = Utils.max(
                                 data[i][j-1]-2,                                    
-                                max( /* CHANGER EN UN SEUL MAX */
-                                    data[i-1][j-1]+pcost(frag1.get(i-1),frag2.get(j-1)),
-                                    data[i-1][j]-2
-                                    )     
+                                data[i-1][j-1]+pcost(frag1.get(i-1),frag2.get(j-1)),
+                                data[i-1][j]-2  
                                 );
             }
         }
-        // printSimi(ok);
     }
     
     public void printSimi()
@@ -84,17 +82,10 @@ public class Simi
         }
     }
 
-    public int get_invert()
-    {
-        int max = data[0][end_j-1];
-        for(int i = 1 ; i < end_i ; i++ )
-        {
-            if (data[i][end_j-1] > max )
-                max = data[i][end_j-1];
-        }
-        return max;
-    }
-
+    /**
+     * Retourne le maximum de la derniere ligne
+     * @return
+     */
     public int get_normal()
     {
         int max = data[end_i-1][0];
@@ -102,6 +93,21 @@ public class Simi
         {
             if (data[end_i-1][i] > max )
                 max = data[end_i-1][i];
+        }
+        return max;
+    }
+
+    /**
+     * Retourne le maximum de la derniere colonne
+     * @return
+     */
+    public int get_invert()
+    {
+        int max = data[0][end_j-1];
+        for(int i = 1 ; i < end_i ; i++ )
+        {
+            if (data[i][end_j-1] > max )
+                max = data[i][end_j-1];
         }
         return max;
     }

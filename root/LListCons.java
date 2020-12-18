@@ -1,9 +1,13 @@
 package root;
 
 import root.dataStuct.Frag;
+import root.dataStuct.HamiltonianPath;
 import root.dataStuct.Overlap;
 import root.dataStuct.Arc;
 
+/**
+ * Classe qui s'occupe d'effectuer le vote de consensus
+ */
 public class LListCons
 {
     private Node head;
@@ -56,7 +60,7 @@ public class LListCons
     }
 
     /**
-     * 
+     * Effectue le vote de consensus 
      * @param frags matrice ou sont stocker tout les fragments
      * @param arcs chemin hamiltonian triee selon l'ordre des arcs
      */
@@ -80,11 +84,11 @@ public class LListCons
 
     /**
      * Retourne le fragment destination de l'arc en fonction de si il est complementer et inverser ou non
-     * @param frags
-     * @param arc
-     * @return
+     * @param frags matrice des fragments
+     * @param arc arc 
+     * @return fragment destination de l'arc
      */
-    public Frag get_frag_dst(Frag[][] frags,Arc arc) // DOIT PAS ETRE LA ???????
+    public Frag get_frag_dst(Frag[][] frags,Arc arc)
     {
         return arc.dst_ci ? frags[arc.dest][1] : frags[arc.dest][0];
     }
@@ -143,7 +147,7 @@ public class LListCons
 
     /**
      * Ajoute un noeud a la fin de la liste
-     * @param data 
+     * @param data donnee avec laquelle on initialise le noeud
      */
     public void add_to_end(byte data)
     {
@@ -165,15 +169,11 @@ public class LListCons
      * Ajoute un fragments dans la liste de consensus
      * 
      * FRAG2 est ajouter
-     * @param frag
-     * @param overlap
+     * @param frag fragments a ajouter 
+     * @param overlap superposition entre le fragment dans la liste et le fragment que l'on ajoute
      */
     public void add_frag(Frag frag, Overlap overlap)
     {
-        // ABCCD
-        //   CCDF
-        //   +  
-
         /* pretraite la partie des octets avant l'overlap */
         {
             String acgt = "acgt";
@@ -198,7 +198,6 @@ public class LListCons
         }
         
         /* partie overlap */
-        // marche pas besoin d ajouter un mecanisme de propagation des gap entre les paires de comparaison 
         {
             Node tmp = this.head;
 
@@ -244,10 +243,8 @@ public class LListCons
             }
         }
 
-        // partie de fin
+        /* partie de fin */
         for(int i = overlap.get_frag2_overlap_size() ; i < frag.size() ; i++)
-        {  
             this.add_to_end(frag.get(i));
-        }
     }
 }

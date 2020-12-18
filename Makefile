@@ -11,7 +11,7 @@ br:
 
 jar:
 	javac $(FILE) -d ./build/
-	cd build && jar cfm FragmentAssembler.jar Manifest.txt root
+	cd build && jar cfm FragmentAssembler.jar ../Manifest.txt root
 
 clean:
 	cd build && rm **/*.class

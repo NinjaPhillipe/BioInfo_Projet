@@ -1,5 +1,7 @@
 package root.dataStuct;
 
+import java.util.ArrayList;
+
 /**
  *  Structure qui permet de representer un fragment en memoire
  */
@@ -102,6 +104,22 @@ public class Frag extends BitsData
         return res;
     }
 
+    /**
+     * Retourne une matrice contenant tout les fragments ainsi que leur complementaire
+     * @param frag_chars Liste des fragments sous forme texte 
+     * @return Matrice nfrag X 2 contenant les fragments et leur complementaire
+     */
+    public static Frag[][] compute_frags(ArrayList<String> frag_chars)
+    {
+       Frag[][] frags = new Frag[frag_chars.size()][2];
+
+       for(int i = 0 ; i < frag_chars.size() ; i++)
+       {
+           frags[i] = Frag.init_f_and_fprime(frag_chars.get(i).toCharArray());
+       }
+       return frags;
+    }
+
     // GET / SET
     /*
         i/nslot : l'octet dans lequel se trouve le champ
@@ -135,9 +153,6 @@ public class Frag extends BitsData
                     break;
                 case T:
                     res+= 't';
-                    break;
-                default:
-                    System.out.println("ERROR "+this.get(i));
                     break;
             }
         }

@@ -80,6 +80,14 @@ public class LListCons
             this.add_frag(get_frag_dst(frags,arc),arc.overlap);
             arc = path.get_next();
         }
+
+        System.out.println("size LLCONS "+this.size);
+        /* traite les noeuds restant dans la liste */
+        while(head!=null)
+        {
+            resS += majority(head.acgt);
+            removeHead();
+        }
     }
 
     /**
@@ -165,6 +173,28 @@ public class LListCons
         }
     }
 
+
+    /**
+     * Retourne la base mojoritaire au sein d'un fragment
+     * @param tab
+     * @return
+     */
+    private char majority(int[] tab)
+    {
+        char[] acgt = {'a','c','g','t'};
+        int max = tab[0];
+        int index = 0;
+        for (int i = 1 ; i < tab.length; i++)
+        {
+            if (tab[i] > max)
+            {
+                max = tab[i];
+                index = i;
+            }
+        }
+        return acgt[index];
+    }
+
     /**
      * Ajoute un fragments dans la liste de consensus
      * 
@@ -175,26 +205,10 @@ public class LListCons
     public void add_frag(Frag frag, Overlap overlap)
     {
         /* pretraite la partie des octets avant l'overlap */
+        for(int pretrait = this.size - overlap.get_frag1_overlap_size(); pretrait > 0;pretrait--)
         {
-            String acgt = "acgt";
-            for(int pretrait = this.size - overlap.get_frag1_overlap_size(); pretrait > 0;pretrait--)
-            {
-                /* cherche la lettre la plus frequente */
-                int max = head.acgt[0];
-                int index = 0;
-                for (int i = 1 ; i < head.acgt.length; i++)
-                {
-                    if (head.acgt[i] > max)
-                    {
-                        max = head.acgt[i];
-                        index = i;
-                    }
-                }
-
-                resS += acgt.charAt(index);
-
-                removeHead();
-            }
+            resS += majority(head.acgt);
+            removeHead();
         }
         
         /* partie overlap */
@@ -242,7 +256,6 @@ public class LListCons
                 }
             }
         }
-
         /* partie de fin */
         for(int i = overlap.get_frag2_overlap_size() ; i < frag.size() ; i++)
             this.add_to_end(frag.get(i));

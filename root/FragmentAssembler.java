@@ -22,7 +22,6 @@ public class FragmentAssembler
         if(args[3].equals("-out-ic"))
             outputci = args[4];
 
-        // TEST ALL
         ArrayList<String> frags_str = Utils.readFile(input);
         Frag[][] frags = Frag.compute_frags(frags_str);
         Graph g = new Graph(frags);

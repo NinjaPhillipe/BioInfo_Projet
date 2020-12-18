@@ -69,18 +69,6 @@ public class Simi
             }
         }
     }
-    
-    public void printSimi()
-    {
-        for (int i = 0 ; i < end_i ; i++)
-        {
-            for (int j = 0 ; j < end_j ; j++)
-            {
-                System.out.format("%3d",data[i][j]);
-            }
-            System.out.print("\n");
-        }
-    }
 
     /**
      * Retourne le maximum de la derniere ligne
@@ -110,6 +98,18 @@ public class Simi
                 max = data[i][end_j-1];
         }
         return max;
+    }
+
+    public void printSimi()
+    {
+        for (int i = 0 ; i < end_i ; i++)
+        {
+            for (int j = 0 ; j < end_j ; j++)
+            {
+                System.out.format("%3d",data[i][j]);
+            }
+            System.out.print("\n");
+        }
     }
 
     public int getEnd_i() { return end_i; }

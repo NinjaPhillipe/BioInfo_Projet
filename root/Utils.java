@@ -38,9 +38,7 @@ public class Utils
                     }
                 }
                 else
-                {
                     tmp += data;
-                }
             }
             /* C'est la fin du fichier */
             res.add(tmp);
